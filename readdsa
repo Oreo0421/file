@@ -1,0 +1,78 @@
+    1. Installation
+首先克隆所需要的代码库
+HUGS：https://github.com/apple/ml-hugs
+Animatable_Gaussian: https://github.com/lizhe00/AnimatableGaussians
+    2. Preparing the datasets and models
+1.下载人物数据集
+AvatarReX（https://github.com/lizhe00/AnimatableGaussians/blob/master/AVATARREX_DATASET.md），
+Thuman4.0，（https://github.com/ZhengZerong/THUman4.0-Dataset）
+ActorsHQ（自己从谷歌下）
+2.人物训练根据https://github.com/lizhe00/AnimatableGaussians进行，用他的pre来做，路径无效，就自己创建文件夹，按照路径来
+3.如果需要换动作序列
+python main_avatar.py -c configs/avatarrex_zzr/avatar.yaml --mode=test
+更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改
+run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
+3.场景/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/数据集里面是处理好的场景点云ply文件
+
+    3. combine human gaussian and scene gaussian
+1. 拿到人物渲染之后的数据集
+1.joint :
+python save_joints_trans_sequence.py \
+  --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_00_free_view/batch_700000/pca_20_sigma_2.00/joints/ \
+  --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/
+2.joint line to 
+python add_line2joint_sequence.py \
+  --in_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/npy/transformed/ \
+  --out_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/pt/ \
+  --start 0 --end 99
+ps:如果帧数不是 0~99？怎么查？
+看看 .npy 的最大编号，然后替换 –end。
+
+1.人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
+then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
+python scripts/transform_human_sequence.py \
+    --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_01_free_view/batch_700000/pca_20_sigma_2.00/posed_gaussians \
+    --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_human \
+    --output_format both \
+    --start_frame 00002000 \
+    --end_frame 00002001
+2.在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
+python hugs/renderer/render_sequence_firstcamera.py \
+  --human_pt_dir "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_human/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
+  --output_dir "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/" \
+  --start_frame 00002000\
+  --end_frame 00002001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
+  --render_mode human_scene
+
+
+
+3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
+python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
+ 
+
+4.使用摄像头的四元数生成摄像头json文件
+摄像头的四元数path是在neuman/dataset/lab/sparse
+这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
+python run_extract_camera.py  --seq lab. --split. train.  --output (地址自选) 
+（我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
+
+
+解决cuda 11.7 和12.0不匹配的问题
+export CUDA_HOME=$HOME/cuda-11.7
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+ 
+更改libjpg.so path
+export LIBRARY_PATH=$CONDA_PREFIX/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+ 
+Exr读取
+export OPENCV_IO_ENABLE_OPENEXR=1
+ 
+Ml-hugs的路径设置
+export PYTHONPATH=$(pwd):$PYTHONPATH
+
+
+

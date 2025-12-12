@@ -16,11 +16,11 @@ run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.
 
     3. combine human gaussian and scene gaussian
 1. 拿到人物渲染之后的数据集
-1.joint :
+1.1joint :
 python save_joints_trans_sequence.py \
   --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_00_free_view/batch_700000/pca_20_sigma_2.00/joints/ \
   --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/
-2.joint line to 
+1.2joint line to 
 python add_line2joint_sequence.py \
   --in_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/npy/transformed/ \
   --out_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/pt/ \
@@ -28,21 +28,21 @@ python add_line2joint_sequence.py \
 ps:如果帧数不是 0~99？怎么查？
 看看 .npy 的最大编号，然后替换 –end。
 
-1.人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
+2.1人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
 then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
 python scripts/transform_human_sequence.py \
     --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_01_free_view/batch_700000/pca_20_sigma_2.00/posed_gaussians \
     --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_human \
     --output_format both \
     --start_frame 00002000 \
-    --end_frame 00002001
-2.在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
+    --end_frame 00002499
+2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 python hugs/renderer/render_sequence_firstcamera.py \
   --human_pt_dir "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_human/pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
   --output_dir "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/" \
   --start_frame 00002000\
-  --end_frame 00002001\
+  --end_frame 00002499\
   --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
   --render_mode human_scene
 

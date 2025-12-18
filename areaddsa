@@ -8,35 +8,47 @@ AvatarReX（https://github.com/lizhe00/AnimatableGaussians/blob/master/AVATARREX
 Thuman4.0，（https://github.com/ZhengZerong/THUman4.0-Dataset）
 ActorsHQ（自己从谷歌下）
 2.人物训练根据https://github.com/lizhe00/AnimatableGaussians进行，用他的pre来做，路径无效，就自己创建文件夹，按照路径来
+
 3.如果需要换动作序列
+
 python main_avatar_joint.py -c configs/avatarrex_zzr/avatar.yaml --mode=test
+
 更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改
+
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
+
 3.场景/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/数据集里面是处理好的场景点云ply文件
 
-    3. combine human gaussian and scene gaussian
+3. combine human gaussian and scene gaussian
 1. 拿到人物渲染之后的数据集
 1.1joint :
+
 python save_joints_trans_sequence.py \
   --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_00_free_view/batch_700000/pca_20_sigma_2.00/joints/ \
   --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/
+
 1.2joint line to 
+
 python add_line2joint_sequence.py \
   --in_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/npy/transformed/ \
   --out_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/pt/ \
   --start 0 --end 99
+
 ps:如果帧数不是 0~99？怎么查？
 看看 .npy 的最大编号，然后替换 –end。
 
 2.1人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
 then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
+
 python scripts/transform_human_sequence.py \
     --input_dir /mnt/data_hdd/fzhi/human_data/test_results/pca_20_sigma_2.00/posed_gaussians/
     --output_dir /mnt/data_hdd/fzhi/mid/01/
     --output_format both \
     --start_frame 00002000 \
     --end_frame 00002499
+
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
+
 python hugs/renderer/render_sequence_firstcamera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/01//pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \

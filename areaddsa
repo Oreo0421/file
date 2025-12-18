@@ -41,11 +41,12 @@ ps:如果帧数不是 0~99？怎么查？
 then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
 
 python scripts/transform_human_sequence.py \
-    --input_dir /mnt/data_hdd/fzhi/human_data/test_results/pca_20_sigma_2.00/posed_gaussians/
-    --output_dir /mnt/data_hdd/fzhi/mid/01/
-    --output_format both \
-    --start_frame 00002000 \
-    --end_frame 00002499
+--input_dir /mnt/data_hdd/fzhi/human_data/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/01/ \
+--output_format both \
+--start_frame 00002000 \
+--end_frame 00002499
+
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 

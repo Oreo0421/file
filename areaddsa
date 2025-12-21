@@ -149,6 +149,31 @@ cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
 chmod +x train_mvhnpp.sh
 ./train_mvhnpp.sh mvhn_xxx
 
+
+
+conda activate anim3dgs
+git clone https://github.com/mkazhdan/PoissonRecon.git
+conda install -c conda-forge libpng jpeg zlib -y
+make pointinterpolant
+ls $CONDA_PREFIX/lib | egrep "libpng|libjpeg|libz" | head
+export LIBRARY_PATH=$CONDA_PREFIX/lib:$LIBRARY_PATH                                                                                                                                                                                                                                                                                         
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH                                                                                                                                                 
+export CPATH=$CONDA_PREFIX/include:$CPATH                                                                                                                                                                 
+export C_INCLUDE_PATH=$CONDA_PREFIX/include:$C_INCLUDE_PATH                                                                                                                                               
+export CPLUS_INCLUDE_PATH=$CONDA_PREFIX/include:$CPLUS_INCLUDE_PATH  
+
+
+
+在 主目录下，mkdir -p bins
+cp PoissonRecon/Bin/Linux/PointInterpolant ./bins/
+chmod +x ./bins/PointInterpolant
+
+然后vim ./gen_data/gen_weight_volume.py
+solve(smpl_model.lbs_weights.shape[-1], "./bins/PointInterpolant")
+
+
+
+
 # detach: Ctrl+B D
 
 
@@ -160,5 +185,8 @@ tmux attach -t train10100
 tmux new -s mvhn101010
 然后再跑脚本
 
+export CUDA_VISIBLE_DEVICES=0
+在那台电脑运行这个。
 
+ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 

@@ -141,6 +141,7 @@ pretrained_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar/pretrained
 net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar
 
 然后 
+先处理数据，生成cablirition文件
 tmux new -s train200010
 conda activate anim3dgs
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
@@ -150,6 +151,7 @@ chmod +x train_mvhnpp.sh
 ./train_mvhnpp.sh mvhn_xxx
 
 
+可能会遇到的环境编译问题：
 
 conda activate anim3dgs
 git clone https://github.com/mkazhdan/PoissonRecon.git

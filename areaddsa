@@ -95,7 +95,7 @@ export PYTHONPATH=$(pwd):$PYTHONPATH
 
 假设你的新数据在：
 
-/mnt/data_hdd/fzhi/dataset/101223/
+/mnt/data_hdd/fzhi/dataset/102231/
 里面至少要有（名字可能略不同，但语义要一致）：
 
 cameras/ 里每个相机一个子目录或文件，包含 camera.npz 或相机参数
@@ -104,24 +104,24 @@ smplx_params_new/（或你的版本叫 smplx/）里逐帧 *.npz
 
 多视角图片/掩码（训练阶段一定会用到：images/ masks/ 等）
 check ： 
-ls /mnt/data_hdd/fzhi/dataset/101223
-ls /mnt/data_hdd/fzhi/dataset/101223/cameras | head
-ls /mnt/data_hdd/fzhi/dataset/101223/smplx_params_new | head
+ls /mnt/data_hdd/fzhi/dataset/102231
+ls /mnt/data_hdd/fzhi/dataset/102231/cameras | head
+ls /mnt/data_hdd/fzhi/dataset/102231/smplx_params_new | head
 
 1.
 预处理：
 conda activate anim3dgs
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
 
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/101223 
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/102231 
 
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/101412/
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/101207/
 
 生成calibration文件
 
 check：
-ls /mnt/data_hdd/fzhi/dataset/101223/calibrations.json
-ls /mnt/data_hdd/fzhi/dataset/101223/smpl_params.npz
+ls /mnt/data_hdd/fzhi/dataset/102231/calibrations.json
+ls /mnt/data_hdd/fzhi/dataset/102231/smpl_params.npz
  
 ls /mnt/data2/fzhi/101412/calibrations.json
 ls /mnt/data2/fzhi/101412/smpl_params.npz
@@ -146,13 +146,13 @@ pretrained_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar/pretrained
 net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar
 
 然后 
-tmux new -s train200010
+tmux new -s train101883
 conda activate anim3dgs
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
 运行脚本 记得修改subject name！
 
 chmod +x train_mvhnpp.sh
-./train_mvhnpp.sh mvhn_xxx
+./train_mvhnpp.sh mvhn_102231
 
 
 可能会遇到的环境编译问题：
@@ -202,3 +202,7 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101010
 101020 miko
 101223
+101412 miko
+101883 
+101207 miko
+102231

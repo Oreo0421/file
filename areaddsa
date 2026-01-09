@@ -11,7 +11,7 @@ ActorsHQ（自己从谷歌下）
 
 3.如果需要换动作序列
 
-python main_avatar_joint.py -c configs/avatarrex_zzr/avatar.yaml --mode=test
+python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
 
 更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改
 
@@ -41,21 +41,21 @@ ps:如果帧数不是 0~99？怎么查？
 then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
 
 python scripts/transform_human_sequence.py \
---input_dir /mnt/data_hdd/fzhi/human_data/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/01/ \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/ \
 --output_format both \
---start_frame 00002000 \
---end_frame 00002499
+--start_frame 00000000 \
+--end_frame 00000000
 
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 
 python hugs/renderer/render_sequence_firstcamera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/01//pt" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010//pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/02//" \
-  --start_frame 00002000\
-  --end_frame 00002499\
+  --output_dir "/mnt/data_hdd/fzhi/output/101010//" \
+  --start_frame 00000000\
+  --end_frame 00000000\
   --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
   --render_mode human_scene
 
@@ -206,3 +206,20 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101883 
 101207 miko
 102231
+
+
+
+
+python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
+                                              --show-interval 3
+
+
+yolo
+
+dataset transfer
+python tools/dataset_converters/bisdrone2coco.py --img-dir ./data/cat/images \
+                                                --labels-dir ./data/cat/labels \
+                                                --out ./data/cat/annotations/annotations_all.json
+
+python tools/analysis_tools/browse_coco_json.py --img-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/images \
+                                                --ann-file /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/coco_label/train.json

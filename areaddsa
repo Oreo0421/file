@@ -13,7 +13,7 @@ ActorsHQ（自己从谷歌下）
 
 python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
 
-更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改
+更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改,并且对npz文件的trans和oreinted 做适配
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
 
@@ -206,7 +206,7 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101883 
 101207 miko
 102231
-
+10
 
 
 

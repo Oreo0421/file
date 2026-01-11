@@ -14,6 +14,12 @@ ActorsHQ（自己从谷歌下）
 python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
 
 更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改,并且对npz文件的trans和oreinted 做适配
+python trans_npz_all.py \
+  --src pose_00.npz \
+  --tgt_npz 01_newformat.npz \
+  --mode align_first_frame \
+  --out_npz 01_newformat_rooted.npz
+
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
 
@@ -45,7 +51,7 @@ python scripts/transform_human_sequence.py \
 --output_dir /mnt/data_hdd/fzhi/mid/101010/ \
 --output_format both \
 --start_frame 00000000 \
---end_frame 00000000
+--end_frame 00000001
 
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
@@ -55,7 +61,7 @@ python hugs/renderer/render_sequence_firstcamera.py \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
   --output_dir "/mnt/data_hdd/fzhi/output/101010//" \
   --start_frame 00000000\
-  --end_frame 00000000\
+  --end_frame 00000001\
   --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
   --render_mode human_scene
 
@@ -95,7 +101,7 @@ export PYTHONPATH=$(pwd):$PYTHONPATH
 
 假设你的新数据在：
 
-/mnt/data_hdd/fzhi/dataset/102231/
+/mnt/data_hdd/fzhi/dataset/103028/
 里面至少要有（名字可能略不同，但语义要一致）：
 
 cameras/ 里每个相机一个子目录或文件，包含 camera.npz 或相机参数
@@ -104,18 +110,18 @@ smplx_params_new/（或你的版本叫 smplx/）里逐帧 *.npz
 
 多视角图片/掩码（训练阶段一定会用到：images/ masks/ 等）
 check ： 
-ls /mnt/data_hdd/fzhi/dataset/102231
-ls /mnt/data_hdd/fzhi/dataset/102231/cameras | head
-ls /mnt/data_hdd/fzhi/dataset/102231/smplx_params_new | head
+ls /mnt/data2/fzhi/103028
+ls /mnt/data2/fzhi/103028/cameras | head
+ls /mnt/data2/fzhi/103028/smplx_params_new | head
 
 1.
 预处理：
-conda activate anim3dgs
-cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
+conda activate anima3dgs
+cd /home/fzhi/fzt/AnimatableGaussians
 
 python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/102231 
 
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/101207/
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/103028/
 
 生成calibration文件
 
@@ -123,13 +129,13 @@ check：
 ls /mnt/data_hdd/fzhi/dataset/102231/calibrations.json
 ls /mnt/data_hdd/fzhi/dataset/102231/smpl_params.npz
  
-ls /mnt/data2/fzhi/101412/calibrations.json
-ls /mnt/data2/fzhi/101412/smpl_params.npz
+ls /mnt/data2/fzhi/103028/calibrations.json
+ls /mnt/data2/fzhi/103028/smpl_params.npz
 
 2.为 101223 新建 configs（只需要改 3 个地方）
 1.复制一份 101010 的配置
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians/configs
-cp -r mvhn_101010 mvhn_101223
+cp -r mvhn_101412 mvhn_103028
 
 必改 1：subject_name
 subject_name: 200010
@@ -206,7 +212,8 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101883 
 101207 miko
 102231
-10
+101177 miko
+103028
 
 
 

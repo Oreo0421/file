@@ -206,13 +206,18 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101883 
 101207 miko
 102231
-
-
+100834
+100840
+100931
+100990
+101029
+101032
 
 
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
                                               --show-interval 3
 
+tensorboard --logdir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/ --port 6006
 
 yolo
 
@@ -223,3 +228,10 @@ python tools/dataset_converters/bisdrone2coco.py --img-dir ./data/cat/images \
 
 python tools/analysis_tools/browse_coco_json.py --img-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/images \
                                                 --ann-file /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/coco_label/train.json
+
+python tools/analysis_tools/browse_dataset.py configs/visdrone.py \
+                                              --show-interval 3
+
+
+
+

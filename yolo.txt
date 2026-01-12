@@ -1,0 +1,25 @@
+python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
+                                              --show-interval 3
+
+tensorboard --logdir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/ --port 6006
+
+yolo
+
+dataset transfer
+python tools/dataset_converters/bisdrone2coco.py --img-dir ./data/cat/images \
+                                                --labels-dir ./data/cat/labels \
+                                                --out ./data/cat/annotations/annotations_all.json
+
+python tools/analysis_tools/browse_coco_json.py --img-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/images \
+                                                --ann-file /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/coco_label/train.json
+
+python tools/analysis_tools/browse_dataset.py configs/visdrone.py \
+                                              --show-interval 3
+train
+      python tools/train.py configs/visdrone.py
+test:
+
+python tools/test.py configs/visdrone.py \
+                    /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth \
+                     --show-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/test
+

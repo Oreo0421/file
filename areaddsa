@@ -223,9 +223,8 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101177 miko
 103028
 
->>>>>>> 352baaa67aecad976b5f3b8988da62a6599f7134
 
-
+shi xi
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
                                               --show-interval 3
 
@@ -243,7 +242,11 @@ python tools/analysis_tools/browse_coco_json.py --img-dir /mnt/data_hdd/fzhi/tra
 
 python tools/analysis_tools/browse_dataset.py configs/visdrone.py \
                                               --show-interval 3
+train
+      python tools/train.py configs/visdrone.py
+test:
 
-
-
+python tools/test.py configs/visdrone.py \
+                    /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth \
+                     --show-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/test
 

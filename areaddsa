@@ -62,7 +62,7 @@ python hugs/renderer/render_sequence_firstcamera.py \
   --output_dir "/mnt/data_hdd/fzhi/output/101010_2m//" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_2m.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_2m_new.json" \
   --render_mode human_scene
 
 
@@ -81,7 +81,7 @@ python hugs/renderer/render_sequence_debug1.py
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
 
 python run_extract_camera.py     --seq lab     --split train     --output ./sparse/output
-
+python run_extract_camera_V2.py     --seq lab     --img_name images_3m.txt     --out_name djr_2m     --output ./sparse/output
 (地址自选) 
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 

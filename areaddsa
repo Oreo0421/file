@@ -256,6 +256,10 @@ train
 test:
 
 python tools/test.py configs/visdrone.py \
+<<<<<<< Updated upstream
                     /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth \
+=======
+                    /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_100.pth \
+>>>>>>> Stashed changes
                      --show-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/test
 

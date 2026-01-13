@@ -1,0 +1,251 @@
+    1. Installation
+首先克隆所需要的代码库
+HUGS：https://github.com/apple/ml-hugs
+Animatable_Gaussian: https://github.com/lizhe00/AnimatableGaussians
+    2. Preparing the datasets and models
+1.下载人物数据集
+AvatarReX（https://github.com/lizhe00/AnimatableGaussians/blob/master/AVATARREX_DATASET.md），
+Thuman4.0，（https://github.com/ZhengZerong/THUman4.0-Dataset）
+ActorsHQ（自己从谷歌下）
+2.人物训练根据https://github.com/lizhe00/AnimatableGaussians进行，用他的pre来做，路径无效，就自己创建文件夹，按照路径来
+
+3.如果需要换动作序列
+
+python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
+
+更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改,并且对npz文件的trans和oreinted 做适配
+python trans_npz_all.py \
+  --src pose_00.npz \
+  --tgt_npz 01_newformat.npz \
+  --mode align_first_frame \
+  --out_npz 01_newformat_rooted.npz
+
+
+run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
+
+3.场景/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/数据集里面是处理好的场景点云ply文件
+
+3. combine human gaussian and scene gaussian
+1. 拿到人物渲染之后的数据集
+1.1joint :
+
+python save_joints_trans_sequence.py \
+  --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_00_free_view/batch_700000/pca_20_sigma_2.00/joints/ \
+  --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/
+
+1.2joint line to 
+
+python add_line2joint_sequence.py \
+  --in_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/npy/transformed/ \
+  --out_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/pt/ \
+  --start 0 --end 99
+
+ps:如果帧数不是 0~99？怎么查？
+看看 .npy 的最大编号，然后替换 –end。
+
+2.1人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
+then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
+
+python scripts/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/ \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+
+2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
+
+python hugs/renderer/render_sequence_firstcamera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010//pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010//" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
+  --render_mode human_scene
+
+
+
+3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
+python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
+ 
+
+4.使用摄像头的四元数生成摄像头json文件
+摄像头的四元数path是在neuman/dataset/lab/sparse
+这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
+python run_extract_camera.py  --seq lab. --split. train.  --output (地址自选) 
+（我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
+
+
+在配置ml-hug，以及anim3dgs环境的时候解决cuda 11.7 和12.0不匹配的问题
+export CUDA_HOME=$HOME/cuda-11.7
+export PATH=$CUDA_HOME/bin:$PATH
+export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH
+ 
+更改libjpg.so path
+export LIBRARY_PATH=$CONDA_PREFIX/lib:$LIBRARY_PATH
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+ 
+Exr读取
+export OPENCV_IO_ENABLE_OPENEXR=1
+ 
+Ml-hugs的路径设置
+export PYTHONPATH=$(pwd):$PYTHONPATH
+
+
+
+远程训练新的数据集：
+
+0）准备：目录结构确认
+
+假设你的新数据在：
+
+/mnt/data_hdd/fzhi/dataset/103028/
+里面至少要有（名字可能略不同，但语义要一致）：
+
+cameras/ 里每个相机一个子目录或文件，包含 camera.npz 或相机参数
+
+smplx_params_new/（或你的版本叫 smplx/）里逐帧 *.npz
+
+多视角图片/掩码（训练阶段一定会用到：images/ masks/ 等）
+check ： 
+ls /mnt/data2/fzhi/103028
+ls /mnt/data2/fzhi/103028/cameras | head
+ls /mnt/data2/fzhi/103028/smplx_params_new | head
+
+1.
+预处理：
+conda activate anima3dgs
+cd /home/fzhi/fzt/AnimatableGaussians
+
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/102231 
+
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/103028/
+
+生成calibration文件
+
+check：
+ls /mnt/data_hdd/fzhi/dataset/102231/calibrations.json
+ls /mnt/data_hdd/fzhi/dataset/102231/smpl_params.npz
+ 
+ls /mnt/data2/fzhi/103028/calibrations.json
+ls /mnt/data2/fzhi/103028/smpl_params.npz
+
+2.为 101223 新建 configs（只需要改 3 个地方）
+1.复制一份 101010 的配置
+cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians/configs
+cp -r mvhn_101412 mvhn_103028
+
+必改 1：subject_name
+subject_name: 200010
+
+必改 2：data_dir
+data_dir: /mnt/data_hdd/fzhi/dataset/200010
+
+必改 3：输出目录（你希望结果放哪）
+
+net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/200010/results/template
+
+# avatar.yaml 里：
+pretrained_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar/pretrained
+net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar
+
+然后 
+tmux new -s train101883
+conda activate anim3dgs
+cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
+运行脚本 记得修改subject name！
+
+chmod +x train_mvhnpp.sh
+./train_mvhnpp.sh mvhn_102231
+
+
+可能会遇到的环境编译问题：
+
+conda activate anim3dgs
+git clone https://github.com/mkazhdan/PoissonRecon.git
+conda install -c conda-forge libpng jpeg zlib -y
+make pointinterpolant
+ls $CONDA_PREFIX/lib | egrep "libpng|libjpeg|libz" | head
+export LIBRARY_PATH=$CONDA_PREFIX/lib:$LIBRARY_PATH                                                                                                                                                                                                                                                                                         
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH                                                                                                                                                 
+export CPATH=$CONDA_PREFIX/include:$CPATH                                                                                                                                                                 
+export C_INCLUDE_PATH=$CONDA_PREFIX/include:$C_INCLUDE_PATH                                                                                                                                               
+export CPLUS_INCLUDE_PATH=$CONDA_PREFIX/include:$CPLUS_INCLUDE_PATH  
+
+
+
+在 主目录下，mkdir -p bins
+cp PoissonRecon/Bin/Linux/PointInterpolant ./bins/
+chmod +x ./bins/PointInterpolant
+
+然后vim ./gen_data/gen_weight_volume.py
+solve(smpl_model.lbs_weights.shape[-1], "./bins/PointInterpolant")
+
+
+
+
+# detach: Ctrl+B D
+
+
+查看：
+tmux ls
+tmux attach -t train10100
+
+
+tmux new -s mvhn101010
+然后再跑脚本
+
+export CUDA_VISIBLE_DEVICES=0
+在那台电脑运行这个。
+
+ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
+
+
+1已完成数据集：
+101477
+101010
+101020 miko
+101223
+101412 miko
+101883 
+101207 miko
+102231
+<<<<<<< HEAD
+100834
+100840
+100931
+100990
+101029
+101032
+=======
+101177 miko
+103028
+
+
+python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
+                                              --show-interval 3
+
+tensorboard --logdir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/ --port 6006
+
+yolo
+
+dataset transfer
+python tools/dataset_converters/bisdrone2coco.py --img-dir ./data/cat/images \
+                                                --labels-dir ./data/cat/labels \
+                                                --out ./data/cat/annotations/annotations_all.json
+
+python tools/analysis_tools/browse_coco_json.py --img-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/images \
+                                                --ann-file /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/train/coco_label/train.json
+
+python tools/analysis_tools/browse_dataset.py configs/visdrone.py \
+                                              --show-interval 3
+train
+      python tools/train.py configs/visdrone.py
+test:
+
+python tools/test.py configs/visdrone.py \
+                    /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth \
+                     --show-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/test
+

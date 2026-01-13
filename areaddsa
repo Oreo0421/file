@@ -55,28 +55,37 @@ python scripts/transform_human_sequence.py \
 
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
-
+单摄像头：
 python hugs/renderer/render_sequence_firstcamera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010//pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010//" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010_2m//" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_2m.json" \
   --render_mode human_scene
 
 
 
 3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
-python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
- 
+python hugs/renderer/render_sequence_debug1.py        
+--human_pt output/gs_out/human_full_sh2.pt        
+--scene_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt       
+ --camera_json camera_params/lab/train/camera_params.json        
+ --render_mode human_scene        
+ --out_png rendered_images/human_scene_finish.png
+ djr_2m_up_1m
 
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
-python run_extract_camera.py  --seq lab. --split. train.  --output (地址自选) 
+
+python run_extract_camera.py  --seq lab. --split. train.  --output /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/sparse/output/
+
+(地址自选) 
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 
+python modify_cam_position.py     --input images_garden_1m.txt     --output-dir ./modified     --distance 0.5
 
 在配置ml-hug，以及anim3dgs环境的时候解决cuda 11.7 和12.0不匹配的问题
 export CUDA_HOME=$HOME/cuda-11.7
@@ -224,7 +233,7 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 103028
 
 
-shi xi
+实习
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
                                               --show-interval 3
 

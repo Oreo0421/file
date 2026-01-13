@@ -1,4 +1,4 @@
-    1. Installation
+1. Installation
 首先克隆所需要的代码库
 HUGS：https://github.com/apple/ml-hugs
 Animatable_Gaussian: https://github.com/lizhe00/AnimatableGaussians
@@ -57,12 +57,12 @@ python scripts/transform_human_sequence.py \
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 
 python hugs/renderer/render_sequence_firstcamera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010//pt" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010//" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010_test/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_front.json" \
   --render_mode human_scene
 
 
@@ -74,7 +74,10 @@ python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/huma
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
-python run_extract_camera.py  --seq lab. --split. train.  --output (地址自选) 
+
+python run_extract_camera.py  --seq lab --split train  --output output
+
+
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 
 

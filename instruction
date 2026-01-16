@@ -58,12 +58,12 @@ python scripts/transform_human_sequence.py \
 
 python hugs/renderer/render_sequence_firstcamera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010_test/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_matched.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/06/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_front.json" \
-  --render_mode human_scene
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
+  --render_mode scene
 
 
 
@@ -80,6 +80,28 @@ python run_extract_camera.py  --seq lab --split train  --output output
 
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 
+scene zuan huan
+in blender,adjust it to correct,then use  scropting-python console
+import bpy
+import numpy as np
+
+obj = bpy.context.active_object
+M = np.array(obj.matrix_world, dtype=np.float64)
+
+np.set_printoptions(precision=12, suppress=True)
+print(M)
+
+then use it instead in
+transformer_3dgs_ply cmd:
+python ply_to_pt.py --in_ply scene_out.ply --out_pt scene_out.pt
+
+
+ply2ptfile:
+python ply2pt_mip_nerf_scene.py \
+  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_3dgs_aligned.ply \
+  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_aligned.pt
+
+camera:
 
 在配置ml-hug，以及anim3dgs环境的时候解决cuda 11.7 和12.0不匹配的问题
 export CUDA_HOME=$HOME/cuda-11.7

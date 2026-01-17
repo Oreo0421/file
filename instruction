@@ -53,6 +53,10 @@ python scripts/transform_human_sequence.py \
 --start_frame 00000000 \
 --end_frame 00000001
 
+acJ9oz79KciB_lbJqh9XAW86MQp1OmJnMgk.01.0z126tiwc
+
+
+d：3kMewPtyLoxyWDhpNbfRr286MQp1OmJnMwk.01.0z1niukww
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 

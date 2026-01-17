@@ -84,7 +84,7 @@ python run_extract_camera.py  --seq lab --split train  --output output
 
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 
-scene zuan huan
+scene 转换
 in blender,adjust it to correct,then use  scropting-python console
 import bpy
 import numpy as np
@@ -99,6 +99,7 @@ then use it instead in
 transformer_3dgs_ply cmd:
 python ply_to_pt.py --in_ply scene_out.ply --out_pt scene_out.pt
 
+then
 
 ply2ptfile:
 python ply2pt_mip_nerf_scene.py \

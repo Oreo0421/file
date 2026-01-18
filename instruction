@@ -74,13 +74,16 @@ python hugs/renderer/render_sequence_firstcamera.py \
 3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
 python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
 
+旋转矩阵：
 djr:
 T_total = np.array([
     [ 0.11431113,  0.56197536,  0.81921715, -0.43538997],
     [-0.14897871,  0.82499462, -0.54515064, -1.21867311],
     [-0.98221099, -0.05972914,  0.17802842,  0.78487867],
     [ 0.0,         0.0,         0.0,         1.0        ]
-])
+]) 
+
+
 
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse
@@ -88,11 +91,11 @@ T_total = np.array([
 
 python run_extract_camera.py  --seq lab --split train  --output output
 
-
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 
 scene 转换
-in blender,adjust it to correct,then use  scropting-python console
+在Blender中调整至正确状态，然后使用Python脚本控制台。
+
 import bpy
 import numpy as np
 
@@ -102,18 +105,16 @@ M = np.array(obj.matrix_world, dtype=np.float64)
 np.set_printoptions(precision=12, suppress=True)
 print(M)
 
-then use it instead in
+然后再transformer_3dgs_ply 文件中修改ply场景的旋转矩阵：
 transformer_3dgs_ply cmd:
 python ply_to_pt.py --in_ply scene_out.ply --out_pt scene_out.pt
 
-then
+然后转换成pt文件：
 
-ply2ptfile:
 python ply2pt_mip_nerf_scene.py \
   --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_3dgs_aligned.ply \
   --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_aligned.pt
 
-camera:
 
 在配置ml-hug，以及anim3dgs环境的时候解决cuda 11.7 和12.0不匹配的问题
 export CUDA_HOME=$HOME/cuda-11.7

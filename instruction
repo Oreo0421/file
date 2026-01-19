@@ -7,6 +7,7 @@ Animatable_Gaussian: https://github.com/lizhe00/AnimatableGaussians
 AvatarReX（https://github.com/lizhe00/AnimatableGaussians/blob/master/AVATARREX_DATASET.md），
 Thuman4.0，（https://github.com/ZhengZerong/THUman4.0-Dataset）
 ActorsHQ（自己从谷歌下）
+
 2.人物训练根据https://github.com/lizhe00/AnimatableGaussians进行，用他的pre来做，路径无效，就自己创建文件夹，按照路径来
 
 3.如果需要换动作序列
@@ -22,9 +23,10 @@ python trans_npz_all.py \
 
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
+小结：训练了mvhumannet 30个新人物
 
 3.场景/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/数据集里面是处理好的场景点云ply文件
-
+处理新的3dgs点云文件
 3. combine human gaussian and scene gaussian
 1. 拿到人物渲染之后的数据集
 1.1joint :
@@ -96,6 +98,14 @@ T_total = np.array([
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
+
+使用脚本调整摄像头位置
+python adjust_camera_position_advanced.py --input images_djr.txt --height 2.5 --output images_height_2.5m.txt
+python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward 0.5 --output images_forward_0.5m.txt
+python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward -0.5 --output images_backward_0.5m.txt
+python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right -0.5 --output images_left_0.5m.txt
+python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right 0.5 --output images_right_0.5m.txt
+
 
 python run_extract_camera.py  --seq lab --split train  --output output
 
@@ -200,7 +210,7 @@ net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/103105/avatar
 
 然后 
 tmux new -s train103105
-conda activate anim3dgs
+conda activate anima3dgs
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
 运行脚本 记得修改subject name！
 

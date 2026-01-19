@@ -62,14 +62,14 @@ d：3kMewPtyLoxyWDhpNbfRr286MQp1OmJnMwk.01.0z1niukww
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 
-python hugs/renderer/render_sequence_firstcamera.py \
+python hugs/renderer/render_sequence_from1camera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/04/" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/forward" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
-  --render_mode scene
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/djr_positon_1/djr_forward.json" \
+  --render_mode human_scene
 
 python hugs/renderer/render_sequence_firstcamera.py \
   --human_pt_dir "/mnt/data_hdd/zhiyw/test/first/pt/" \
@@ -85,14 +85,14 @@ python hugs/renderer/render_sequence_firstcamera.py \
 python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
 
 旋转矩阵：
-djr:
+djr_position1:
 T_total = np.array([
     [ 0.11431113,  0.56197536,  0.81921715, -0.43538997],
     [-0.14897871,  0.82499462, -0.54515064, -1.21867311],
     [-0.98221099, -0.05972914,  0.17802842,  0.78487867],
     [ 0.0,         0.0,         0.0,         1.0        ]
 ]) 
-
+djr_postion2:
 
 
 4.使用摄像头的四元数生成摄像头json文件

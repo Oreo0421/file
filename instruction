@@ -69,6 +69,14 @@ python hugs/renderer/render_sequence_firstcamera.py \
   --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_1m.json" \
   --render_mode scene
 
+python hugs/renderer/render_sequence_firstcamera.py \
+  --human_pt_dir "/mnt/data_hdd/zhiyw/test/first/pt/" \
+  --scene_pt "/home/zhiyw/Desktop/animatable_dataset/scene/playroom/playroom.pt" \
+  --output_dir "/home/zhiyw/Desktop/test/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/zhiyw/Desktop/ml-hugs/mip_camera/lab_train_camera_params//playroom.json" \
+  --render_mode scene
 
 
 3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
@@ -116,6 +124,7 @@ python ply2pt_mip_nerf_scene.py \
   --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_aligned.pt
 
 
+
 在配置ml-hug，以及anim3dgs环境的时候解决cuda 11.7 和12.0不匹配的问题
 export CUDA_HOME=$HOME/cuda-11.7
 export PATH=$CUDA_HOME/bin:$PATH
@@ -139,7 +148,7 @@ export PYTHONPATH=$(pwd):$PYTHONPATH
 
 假设你的新数据在：
 
-/mnt/data_hdd/fzhi/dataset/103028/
+/mnt/data_hdd/fzhi/dataset/103105/
 里面至少要有（名字可能略不同，但语义要一致）：
 
 cameras/ 里每个相机一个子目录或文件，包含 camera.npz 或相机参数
@@ -148,8 +157,8 @@ smplx_params_new/（或你的版本叫 smplx/）里逐帧 *.npz
 
 多视角图片/掩码（训练阶段一定会用到：images/ masks/ 等）
 check ： 
-ls /mnt/data2/fzhi/103028
-ls /mnt/data2/fzhi/103028/cameras | head
+ls /mnt/data2/fzhi/103105
+ls /mnt/data2/fzhi/103105/cameras | head
 ls /mnt/data2/fzhi/103028/smplx_params_new | head
 
 1.
@@ -159,7 +168,7 @@ cd /home/fzhi/fzt/AnimatableGaussians
 
 python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/102231 
 
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/103028/
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/103105/
 
 生成calibration文件
 
@@ -167,36 +176,36 @@ check：
 ls /mnt/data_hdd/fzhi/dataset/102231/calibrations.json
 ls /mnt/data_hdd/fzhi/dataset/102231/smpl_params.npz
  
-ls /mnt/data2/fzhi/103028/calibrations.json
-ls /mnt/data2/fzhi/103028/smpl_params.npz
+ls /mnt/data2/fzhi/103105/calibrations.json
+ls /mnt/data2/fzhi/103105/smpl_params.npz
 
 2.为 101223 新建 configs（只需要改 3 个地方）
 1.复制一份 101010 的配置
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians/configs
-cp -r mvhn_101412 mvhn_103028
+cp -r mvhn_101412 mvhn_103105
 
 必改 1：subject_name
-subject_name: 200010
+subject_name: 103105
 
 必改 2：data_dir
-data_dir: /mnt/data_hdd/fzhi/dataset/200010
+data_dir: /mnt/data_hdd/fzhi/dataset/103105
 
 必改 3：输出目录（你希望结果放哪）
 
-net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/200010/results/template
+net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/103105/results/template
 
 # avatar.yaml 里：
-pretrained_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar/pretrained
-net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/200010/avatar
+pretrained_dir: /mnt/data_hdd/fzhi/dataset/103105/avatar/pretrained
+net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/103105/avatar
 
 然后 
-tmux new -s train101883
+tmux new -s train103105
 conda activate anim3dgs
 cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
 运行脚本 记得修改subject name！
 
 chmod +x train_mvhnpp.sh
-./train_mvhnpp.sh mvhn_102231
+./train_mvhnpp.sh mvhn_103105
 
 
 可能会遇到的环境编译问题：
@@ -260,6 +269,7 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 =======
 101177 miko
 103028
+103105
 
 
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \

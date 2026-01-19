@@ -48,27 +48,27 @@ ps:如果帧数不是 0~99？怎么查？
 2.1人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
 then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
 
-python scripts/transform_human_sequence_newdjr.py \
+python scripts/djr/djr_position_2/transform_human_sequence_djr.py \
 --input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/101010/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/postion1 \
 --output_format both \
 --start_frame 00000000 \
 --end_frame 00000001
 
 acJ9oz79KciB_lbJqh9XAW86MQp1OmJnMgk.01.0z126tiwc
 
-
+backward_0.5m
 d：3kMewPtyLoxyWDhpNbfRr286MQp1OmJnMwk.01.0z1niukww
 
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/pt" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/postion1/pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/forward" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/positon2" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/djr_positon_1/djr_forward.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/djr_positon_1/djr_top.json" \
   --render_mode human_scene
 
 python hugs/renderer/render_sequence_firstcamera.py \
@@ -93,7 +93,26 @@ T_total = np.array([
     [ 0.0,         0.0,         0.0,         1.0        ]
 ]) 
 djr_postion2:
-
+T_total = np.array([
+    [ 0.097174286842,  0.776527106762,  0.622545421124, -0.031882703304],
+    [-0.883775293827,  0.354985624552, -0.304838359356,  0.666232705116],
+    [-0.457709938288, -0.520567834377,  0.720770955086,  4.502630233765],
+    [ 0.0,             0.0,             0.0,             1.0            ]
+])
+playroom:
+total = np.array([[ 1.1431149  -1.14361141  1.55017474 -0.12080942]
+ [-0.8450672  -1.91755666 -0.79147898  2.99686062]
+ [ 1.7311127  -0.18091512 -1.4100071  -1.04102581]
+ [ 0.          0.          0.          1.        ]])
+ 
+T = np.array([
+[ 0.302041769028, 0.004976983648, 0.105574645102, -9.022824287415],
+[ 0.028119388968, 0.304340690374, -0.094794824719, 3.952184200287],
+[-0.101882658899, 0.098752155900, 0.286823898554, -6.463224887848],
+[ 0.0, 0.0, 0.0, 1.0]
+])
+T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.064292293, 0.295708864, -0.104032584, 6.120443290], [0.146297743,0.122227906, 0.257016186, -8.623109620], [0.0, 0.0, 0.0, 1.0] ])
+ 
 
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse

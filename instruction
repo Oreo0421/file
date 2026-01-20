@@ -45,30 +45,25 @@ python add_line2joint_sequence.py \
 ps:如果帧数不是 0~99？怎么查？
 看看 .npy 的最大编号，然后替换 –end。
 
-2.1人物的trans_matrix在 /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/human_trans/trans.md
-then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/transform_human_sequence.py
-
-python scripts/djr/djr_position_2/transform_human_sequence_djr.py \
+2.1 align:
+python scripts/room/room_position_2/transform_human_sequence.py \
 --input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/101010/djr/postion2 \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/room/postion2 \
 --output_format both \
 --start_frame 00000000 \
 --end_frame 00000001
 
-acJ9oz79KciB_lbJqh9XAW86MQp1OmJnMgk.01.0z126tiwc
 
-backward_0.5m
-d：3kMewPtyLoxyWDhpNbfRr286MQp1OmJnMwk.01.0z1niukww
 
-2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
+render:
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/playroom/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/playroom/playroom.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/playroom/1" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/postion2/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene_copy/scene/room/room.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/postion2/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/playroom/playroom_positon1/playroom_right.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/room.json"\
   --render_mode human_scene
 
 python hugs/renderer/render_sequence_firstcamera.py \
@@ -100,6 +95,12 @@ T_total = np.array([
     [ 0.0,             0.0,             0.0,             1.0            ]
 ])
 djr_position3:
+T = np.array([
+    [-0.151482775807,  0.849509418011,  0.505357980728, -0.746910810471],
+    [-0.958956837654, -0.002324781846, -0.283542603254,  0.873314142227],
+    [-0.239697277546, -0.527568280697,  0.814995050430, -2.874177217484],
+    [ 0.000000000000,  0.000000000000,  0.000000000000,  1.000000000000]
+])
 
 playroom:
 total = np.array([[ 1.1431149  -1.14361141  1.55017474 -0.12080942]
@@ -115,6 +116,13 @@ T = np.array([
 ])
 T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.064292293, 0.295708864, -0.104032584, 6.120443290], [0.146297743,0.122227906, 0.257016186, -8.623109620], [0.0, 0.0, 0.0, 1.0] ])
  
+Room:
+[[-2.4321614  -0.30902274  0.5826638   4.47053866]
+ [-0.39335989 -1.10731191 -2.229244    3.14324707]
+ [ 0.52939566 -2.24249122  1.02047787 -0.00493473]
+ [ 0.          0.          0.          1.        ]]
+
+
 
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse
@@ -127,15 +135,16 @@ python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forwa
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right -0.5 --output images_left_0.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right 0.5 --output images_right_0.5m.txt
 
-python adjust_camera_position_advanced.py --input images.txt --right 2 --output images_right_0.5m.txt
-python adjust_camera_position_advanced.py --input images_right_0.5m.txt --forward 2 --output images_top.txt
 
 chmod +x extract_camera_from_sparse_images.sh
-./extract_camera_from_sparse_images.sh images_playroom.txt new_camera.json
+
+./extract_camera_from_sparse_images.sh \
+images_playroom.txt \
+playroom.json \
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ###python run_extract_camera.py  --seq lab --split train  --output output
 
-（我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 
 scene 转换
 在Blender中调整至正确状态，然后使用Python脚本控制台。

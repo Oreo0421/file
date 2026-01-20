@@ -63,12 +63,12 @@ d：3kMewPtyLoxyWDhpNbfRr286MQp1OmJnMwk.01.0z1niukww
 2.2在hugs/ml-hugs/scripts/transform_human_sequence.py更改transform_matrix
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/postion1/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr_3dgs.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/positon2" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/playroom/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/playroom/playroom.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/playroom/positon1" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/djr_positon_1/djr_top.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/playroom/playroom_positon1/playroom.json" \
   --render_mode human_scene
 
 python hugs/renderer/render_sequence_firstcamera.py \
@@ -102,8 +102,7 @@ T_total = np.array([
 djr_position3:
 
 playroom:
-position1
-#total = np.array([[ 1.1431149  -1.14361141  1.55017474 -0.12080942]
+total = np.array([[ 1.1431149  -1.14361141  1.55017474 -0.12080942]
  [-0.8450672  -1.91755666 -0.79147898  2.99686062]
  [ 1.7311127  -0.18091512 -1.4100071  -1.04102581]
  [ 0.          0.          0.          1.        ]])
@@ -114,8 +113,7 @@ T = np.array([
 [-0.101882658899, 0.098752155900, 0.286823898554, -6.463224887848],
 [ 0.0, 0.0, 0.0, 1.0]
 ])
-T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.064292293, 0.295708864, -0.104032584, 6.120443290], [0.146297743,0.122227906, 0.257016186, -8.623109620], [0.0, 0.0, 0.0, 1.0] ])# maybe not correct,so i do this agian
-
+T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.064292293, 0.295708864, -0.104032584, 6.120443290], [0.146297743,0.122227906, 0.257016186, -8.623109620], [0.0, 0.0, 0.0, 1.0] ])
  
 
 4.使用摄像头的四元数生成摄像头json文件
@@ -123,12 +121,14 @@ T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.06429
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
 
 使用脚本调整摄像头位置
-python adjust_camera_position_advanced.py --input images_djr.txt --height 2.5 --output images_height_2.5m.txt
+python adjust_camera_position_advanced.py --input images_playroom.txt --height 6 --output images_height_2.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward 0.5 --output images_forward_0.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward -0.5 --output images_backward_0.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right -0.5 --output images_left_0.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right 0.5 --output images_right_0.5m.txt
 
+python adjust_camera_position_advanced.py --input images.txt --right -1 --output images_right_0.5m.txt
+python adjust_camera_position_advanced.py --input images_right_0.5m.txt --forward -1 --output images_top.txt
 
 python run_extract_camera.py  --seq lab --split train  --output output
 
@@ -153,8 +153,8 @@ python transformer_3dgs_ply.py --in_ply playroom.ply --out_ply playroom_aligned.
 然后转换成pt文件：
 
 python ply2pt_mip_nerf_scene.py \
-  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_3dgs_aligned.ply \
-  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/djr_aligned.pt
+  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/playroom_aligned.ply \
+  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/playroom_aligned.pt
 
 
 

@@ -50,7 +50,7 @@ then use python file in /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/scripts/tran
 
 python scripts/djr/djr_position_2/transform_human_sequence_djr.py \
 --input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/101010/postion1 \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/djr/postion2 \
 --output_format both \
 --start_frame 00000000 \
 --end_frame 00000001
@@ -130,7 +130,10 @@ python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right
 python adjust_camera_position_advanced.py --input images.txt --right 2 --output images_right_0.5m.txt
 python adjust_camera_position_advanced.py --input images_right_0.5m.txt --forward 2 --output images_top.txt
 
-python run_extract_camera.py  --seq lab --split train  --output output
+chmod +x extract_camera_from_sparse_images.sh
+./extract_camera_from_sparse_images.sh images_playroom.txt new_camera.json
+
+###python run_extract_camera.py  --seq lab --split train  --output output
 
 （我已经生成好的json摄像机文件在ml-hugs/mip-camera/lab_train_camera_params）
 

@@ -65,10 +65,10 @@ d：3kMewPtyLoxyWDhpNbfRr286MQp1OmJnMwk.01.0z1niukww
 python hugs/renderer/render_sequence_from1camera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/playroom/pt" \
   --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/playroom/playroom.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/playroom/positon1" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/playroom/1" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/playroom/playroom_positon1/playroom.json" \
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/playroom/playroom_positon1/playroom_right.json" \
   --render_mode human_scene
 
 python hugs/renderer/render_sequence_firstcamera.py \
@@ -127,8 +127,8 @@ python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forwa
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right -0.5 --output images_left_0.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right 0.5 --output images_right_0.5m.txt
 
-python adjust_camera_position_advanced.py --input images.txt --right -1 --output images_right_0.5m.txt
-python adjust_camera_position_advanced.py --input images_right_0.5m.txt --forward -1 --output images_top.txt
+python adjust_camera_position_advanced.py --input images.txt --right 2 --output images_right_0.5m.txt
+python adjust_camera_position_advanced.py --input images_right_0.5m.txt --forward 2 --output images_top.txt
 
 python run_extract_camera.py  --seq lab --split train  --output output
 

@@ -46,9 +46,9 @@ ps:如果帧数不是 0~99？怎么查？
 看看 .npy 的最大编号，然后替换 –end。
 
 2.1 align:
-python scripts/room/room_position_2/transform_human_sequence.py \
+python scripts/counter/transform_human_sequence.py \
 --input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/101010/room/postion2 \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/counter/position_1 \
 --output_format both \
 --start_frame 00000000 \
 --end_frame 00000001
@@ -58,67 +58,17 @@ python scripts/room/room_position_2/transform_human_sequence.py \
 render:
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/top/" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/counter/postion1/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/counter/position_1/top/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_top.json"\
-  --render_mode human_scene
-
-python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/backward/" \
-  --start_frame 00000000\
-  --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_backward.json"\
-  --render_mode human_scene
-
-python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/forward/" \
-  --start_frame 00000000\
-  --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_forward.json"\
-  --render_mode human_scene
-
-  Left-
-python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/left/" \
-  --start_frame 00000000\
-  --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_left.json"\
-  --render_mode human_scene
-
-  right-
-
-
-python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/right/" \
-  --start_frame 00000000\
-  --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_right.json"\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/counter/counter.json"\
   --render_mode human_scene
 
 
 
 
-
-
-python hugs/renderer/render_sequence_firstcamera.py \
-  --human_pt_dir "/mnt/data_hdd/zhiyw/test/first/pt/" \
-  --scene_pt "/home/zhiyw/Desktop/animatable_dataset/scene/playroom/playroom.pt" \
-  --output_dir "/home/zhiyw/Desktop/test/" \
-  --start_frame 00000000\
-  --end_frame 00000001\
-  --camera_json "/home/zhiyw/Desktop/ml-hugs/mip_camera/lab_train_camera_params//playroom.json" \
-  --render_mode scene
 
 
 3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
@@ -173,7 +123,7 @@ Room:
 摄像头的四元数path是在neuman/dataset/lab/sparse
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
 
-使用脚本调整摄像头位置
+使用脚本调整摄像头高度
 python adjust_camera_position_advanced.py --input images_djr.txt --height 2.5 --output images_height_2.5m.txt
 python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward 4.5 --output images_top.txt
 
@@ -224,21 +174,20 @@ M = np.array(obj.matrix_world, dtype=np.float64)
 np.set_printoptions(precision=12, suppress=True)
 print(M)
 
-#~ [[ 1.              0.              0.              0.            ]
-#~  [ 0.              0.796962857246  0.60402828455   0.            ]
-#~  [ 0.             -0.60402828455   0.796962857246  0.            ]
-#~  [ 0.              0.              0.              1.            ]]
-#~
+ [[ 1.              0.              0.              0.            ]
+  [ 0.              0.796962857246  0.60402828455   0.            ]
+  [ 0.             -0.60402828455   0.796962857246  0.            ]
+ [ 0.              0.              0.              1.            ]]
 
 然后再transformer_3dgs_ply 文件中修改ply场景的旋转矩阵：
 transformer_3dgs_ply cmd:
-python transformer_3dgs_ply.py --in_ply playroom.ply --out_ply playroom_aligned.ply
+python transformer_3dgs_ply.py --in_ply counter.ply --out_ply counter_aligned.ply
 
 然后转换成pt文件：
 
 python ply2pt_mip_nerf_scene.py \
-  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/playroom_aligned.ply \
-  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/playroom_aligned.pt
+  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned.ply \
+  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned.pt
 
 
 

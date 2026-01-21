@@ -53,23 +53,23 @@ python scripts/counter/transform_human_sequence.py \
 --start_frame 00000000 \
 --end_frame 00000001
 
-
+python scripts/room/room_position_1/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/room/position_1 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
 
 render:
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/counter/postion1/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/counter/position_1/top/" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/playroom/position_1/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/room/room.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/room_position_1/top/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/counter/counter.json"\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room_top.json"\
   --render_mode human_scene
-
-
-
-
-
 
 3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
 python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
@@ -111,26 +111,39 @@ T = np.array([
 ])
 T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.064292293, 0.295708864, -0.104032584, 6.120443290], [0.146297743,0.122227906, 0.257016186, -8.623109620], [0.0, 0.0, 0.0, 1.0] ])
  
-Room:
+Room:position 1
 [[-2.4321614  -0.30902274  0.5826638   4.47053866]
  [-0.39335989 -1.10731191 -2.229244    3.14324707]
  [ 0.52939566 -2.24249122  1.02047787 -0.00493473]
  [ 0.          0.          0.          1.        ]]
 
+counter:
+Transformation matrix applied:
+total=  np.array([[-1.58511592 -0.71332374  1.17837939  1.3652371 ]
+ [-0.29006622 -1.58334779 -1.34865539  2.7719918 ]
+ [ 1.34657729 -1.18075365  1.09660876  2.63152217]
+ [ 0.          0.          0.          1.        ]])
 
+garden:
+Transformation matrix applied:
+Transformation matrix applied:
+[[-1.97442593  0.530018   -0.48033743 -0.65253485]
+ [ 0.14701865 -1.07939381 -1.79535371  1.1591649 ]
+ [-0.7000206  -1.72162446  0.97774322  1.99992636]
+ [ 0.          0.          0.          1.        ]]
 
 4.使用摄像头的四元数生成摄像头json文件
 摄像头的四元数path是在neuman/dataset/lab/sparse
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
 
 使用脚本调整摄像头高度
-python adjust_camera_position_advanced.py --input images_djr.txt --height 2.5 --output images_height_2.5m.txt
-python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward 4.5 --output images_top.txt
+python adjust_camera_position_advanced.py --input images_playroom.txt --height 3.5 --output images_height_3.5m.txt
+
 
 # 左移0.5米 (Z坐标保持2.500不变)
 python adjust_camera_xy_only.py --input images_top.txt --right -0.5 --output images_left.txt
 # 右移0.5米
-python adjust_camera_xy_only.py --input images_top.txt --right 5 --output images_right.txt
+python adjust_camera_xy_only.py --input images_top.txt --right 0.5 --output images_right.txt
 # 前进0.5米
 python adjust_camera_xy_only.py --input images_top.txt --forward 0.5 --output images_forward.txt
 # 后退0.5米
@@ -138,25 +151,28 @@ python adjust_camera_xy_only.py --input images_top.txt --forward -0.5 --output i
 
 
 chmod +x extract_camera_from_sparse_images.sh
+images_top.txt \
+room_top.json \
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ./extract_camera_from_sparse_images.sh \
 images_forward.txt \
-djr_forward.json \
+room_forward.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ./extract_camera_from_sparse_images.sh \
 images_backward.txt \
-djr_backward.json \
+room_backward.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ./extract_camera_from_sparse_images.sh \
 images_left.txt \
-djr_left.json \
+room_left.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ./extract_camera_from_sparse_images.sh \
 images_right.txt \
-djr_right.json \
+room_right.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ###python run_extract_camera.py  --seq lab --split train  --output output

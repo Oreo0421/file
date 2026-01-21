@@ -58,13 +58,58 @@ python scripts/room/room_position_2/transform_human_sequence.py \
 render:
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/postion2/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene_copy/scene/room/room.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/postion2/" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/top/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/room.json"\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_top.json"\
   --render_mode human_scene
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/backward/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_backward.json"\
+  --render_mode human_scene
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/forward/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_forward.json"\
+  --render_mode human_scene
+
+  Left-
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/left/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_left.json"\
+  --render_mode human_scene
+
+  right-
+
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/postion3/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/postion3/right/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_right.json"\
+  --render_mode human_scene
+
+
+
+
+
 
 python hugs/renderer/render_sequence_firstcamera.py \
   --human_pt_dir "/mnt/data_hdd/zhiyw/test/first/pt/" \
@@ -129,18 +174,39 @@ Room:
 这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
 
 使用脚本调整摄像头位置
-python adjust_camera_position_advanced.py --input images_playroom.txt --height 6 --output images_height_2.5m.txt
-python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward 0.5 --output images_forward_0.5m.txt
-python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward -0.5 --output images_backward_0.5m.txt
-python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right -0.5 --output images_left_0.5m.txt
-python adjust_camera_position_advanced.py --input images_height_2.5m.txt --right 0.5 --output images_right_0.5m.txt
+python adjust_camera_position_advanced.py --input images_djr.txt --height 2.5 --output images_height_2.5m.txt
+python adjust_camera_position_advanced.py --input images_height_2.5m.txt --forward 4.5 --output images_top.txt
+
+# 左移0.5米 (Z坐标保持2.500不变)
+python adjust_camera_xy_only.py --input images_top.txt --right -0.5 --output images_left.txt
+# 右移0.5米
+python adjust_camera_xy_only.py --input images_top.txt --right 5 --output images_right.txt
+# 前进0.5米
+python adjust_camera_xy_only.py --input images_top.txt --forward 0.5 --output images_forward.txt
+# 后退0.5米
+python adjust_camera_xy_only.py --input images_top.txt --forward -0.5 --output images_backward.txt
 
 
 chmod +x extract_camera_from_sparse_images.sh
 
 ./extract_camera_from_sparse_images.sh \
-images_playroom.txt \
-playroom.json \
+images_forward.txt \
+djr_forward.json \
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
+
+./extract_camera_from_sparse_images.sh \
+images_backward.txt \
+djr_backward.json \
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
+
+./extract_camera_from_sparse_images.sh \
+images_left.txt \
+djr_left.json \
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
+
+./extract_camera_from_sparse_images.sh \
+images_right.txt \
+djr_right.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ###python run_extract_camera.py  --seq lab --split train  --output output
@@ -157,6 +223,12 @@ M = np.array(obj.matrix_world, dtype=np.float64)
 
 np.set_printoptions(precision=12, suppress=True)
 print(M)
+
+#~ [[ 1.              0.              0.              0.            ]
+#~  [ 0.              0.796962857246  0.60402828455   0.            ]
+#~  [ 0.             -0.60402828455   0.796962857246  0.            ]
+#~  [ 0.              0.              0.              1.            ]]
+#~
 
 然后再transformer_3dgs_ply 文件中修改ply场景的旋转矩阵：
 transformer_3dgs_ply cmd:

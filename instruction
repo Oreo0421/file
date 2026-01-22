@@ -53,35 +53,47 @@ python scripts/counter/transform_human_sequence.py \
 --start_frame 00000000 \
 --end_frame 00000001
 
-python scripts/djr/djr_position_1//transform_human_sequence.py \
+python scripts/room/p2/transform_human_sequence.py \
 --input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/101010/djr/position_1 \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/room/p2 \
 --output_format both \
 --start_frame 00000000 \
 --end_frame 00000001
 
+
 render:
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/position_1/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/djr_position_1/top/" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/p2/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/room/room_aligned_cut.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/test2/top/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_top.json"\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p2/room_top.json"\
   --render_mode human_scene
+
+
+  python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/position_1/pt" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned_cut.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/counter/test/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/counter/p1/counter_top.json"\
+  --render_mode scene
 
 3.人物点云和场景点云融合用ml-hugs/hugs/renderer/render_sequence_firstcamera.py(单个摄像头)或者hugs/hugs/renderer/gs_renderer.py(多个摄像头， 有几个摄像头渲染几张图片)
 python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/human_full_sh2.pt        --scene_pt output/gs_out/scene_gs_out.pt        --camera_json camera_params/lab/train/camera_params.json        --render_mode human_scene        --out_png rendered_images/human_scene_finish.png
 
 旋转矩阵：
 djr_position1:
-T_total = np.array([
-    [ 0.11431113,  0.56197536,  0.81921715, -0.43538997],
-    [-0.14897871,  0.82499462, -0.54515064, -1.21867311],
-    [-0.98221099, -0.05972914,  0.17802842,  0.78487867],
-    [ 0.0,         0.0,         0.0,         1.0        ]
-]) 
+T = np.array([
+    [ 0.072728075087,  0.858601033688,  0.507459282875, -1.072966337204],
+    [-0.995899140835,  0.035067219287,  0.083397984505,  1.208601236343],
+    [ 0.053810410202, -0.511443614960,  0.857630372047,  0.289357781410],
+    [ 0.0,             0.0,             0.0,             1.0]
+], dtype=np.float64)
+
 djr_postion2:
 T_total = np.array([
     [ 0.097174286842,  0.776527106762,  0.622545421124, -0.031882703304],
@@ -98,32 +110,26 @@ T = np.array([
 ])
 
 playroom:
-total = np.array([[ 1.1431149  -1.14361141  1.55017474 -0.12080942]
- [-0.8450672  -1.91755666 -0.79147898  2.99686062]
- [ 1.7311127  -0.18091512 -1.4100071  -1.04102581]
- [ 0.          0.          0.          1.        ]])
- 
-T = np.array([
-[ 0.302041769028, 0.004976983648, 0.105574645102, -9.022824287415],
-[ 0.028119388968, 0.304340690374, -0.094794824719, 3.952184200287],
-[-0.101882658899, 0.098752155900, 0.286823898554, -6.463224887848],
-[ 0.0, 0.0, 0.0, 1.0]
-])
-T2 = np.array([ [0.277242637, 0.004076329, -0.159749540, 0.474825714], [-0.064292293, 0.295708864, -0.104032584, 6.120443290], [0.146297743,0.122227906, 0.257016186, -8.623109620], [0.0, 0.0, 0.0, 1.0] ])
- 
+    T_TOTAL = np.array([
+        [ 0.95676806, -1.12771127,  1.68239787,  0.5641625 ],
+        [ 0.00870305, -1.85836058, -1.25060843,  2.2911702 ],
+        [ 2.02536921,  0.54070739, -0.78937747, -2.34121266],
+        [ 0.0,         0.0,         0.0,         1.0]], dtype=np.float64)
 Room:
 position1:
 Transformation matrix applied:
-[[-2.4321614  -0.30902274  0.5826638   4.37908193]
- [-0.39335989 -1.10731191 -2.229244    1.30346221]
- [ 0.52939566 -2.24249122  1.02047787  0.96269101]
+
+[[-2.44379453 -0.47741441  0.38774337  3.69274177]
+ [ 0.10870355 -1.89897366 -1.65302248  1.1510081 ]
+ [ 0.60535333 -1.58630894  1.86214197 -0.69644767]
  [ 0.          0.          0.          1.        ]]
+
 
 position 2:
 Transformation matrix applied:
-[[-2.43513294 -0.32081661  0.56356514  4.05876218]
- [-0.37648362 -1.08373745 -2.24369648  2.11131161]
- [ 0.52800442 -2.25233027  0.99931058 -0.81168407]
+[[-2.44379453 -0.47741441  0.38774337  4.42851045]
+ [ 0.10870355 -1.89897366 -1.65302248  1.1510081 ]
+ [ 0.60535333 -1.58630894  1.86214197  0.86278731]
  [ 0.          0.          0.          1.        ]]
 
 counter:
@@ -140,13 +146,20 @@ Transformation matrix applied:
  [ 0.14701865 -1.07939381 -1.79535371  1.1591649 ]
  [-0.7000206  -1.72162446  0.97774322  1.99992636]
  [ 0.          0.          0.          1.        ]]
+ new :
+ [[-2.06746281 -0.05552876 -0.36402598 -0.04313992]
+ [ 0.28645282 -1.54703895 -1.39090455  1.44365869]
+ [-0.23139405 -1.41900942  1.53064371  1.61558577]
+ [ 0.          0.          0.          1.        ]]
 
-4.使用摄像头的四元数生成摄像头json文件
-摄像头的四元数path是在neuman/dataset/lab/sparse
-这一步的使用是选取camera.txt加上对应的image.txt作为run_extract_camera.py的input,需要使用那个场景，就把那个场景的image_name.txt改成image.txt,比如说,如果要生成playroom的摄像头json 文件，那就把image_playroom.txt改成image.txt
+
+
+
+
+4.使用摄像头的四元数生成摄像头json文件,fisheye     op43dgs/submodules/diff-gaussian-rasterization-fisheye
 
 使用脚本调整摄像头高度
-python adjust_camera_position_advanced.py --input images_to.txt --height 2.5 --output images_top.txt
+python adjust_camera_position_advanced.py --input images_aligned.txt --height 2.5 --output images_top.txt
 
 # 左移0.5米 (Z坐标保持2.500不变)
 python adjust_camera_xy_only.py --input images_top.txt --right -0.5 --output images_left.txt
@@ -156,6 +169,12 @@ python adjust_camera_xy_only.py --input images_top.txt --right 0.5 --output imag
 python adjust_camera_xy_only.py --input images_top.txt --forward 0.5 --output images_forward.txt
 # 后退0.5米
 python adjust_camera_xy_only.py --input images_top.txt --forward -0.5 --output images_backward.txt
+
+
+./extract_camera_from_sparse_images.sh \
+images_djr.txt \
+djr_top.json \
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 chmod +x extract_camera_from_sparse_images.sh
 ./extract_camera_from_sparse_images.sh \
@@ -197,21 +216,43 @@ M = np.array(obj.matrix_world, dtype=np.float64)
 
 np.set_printoptions(precision=12, suppress=True)
 print(M)
-
+counter:
  [[ 1.              0.              0.              0.            ]
   [ 0.              0.796962857246  0.60402828455   0.            ]
   [ 0.             -0.60402828455   0.796962857246  0.            ]
  [ 0.              0.              0.              1.            ]]
 
+ garden
+M = np.array([
+    [ 0.999988853931, -0.001920162351,  0.004311107099,  0.0],
+    [ 0.0,             0.913487672806,  0.406866401434,  0.0],
+    [-0.004719392397, -0.406861871481,  0.913477480412,  0.0],
+    [ 0.0,             0.0,             0.0,             1.0]
+], dtype=np.float64)
+room:
+
+print(M)
+#~ [[ 0.9982213974    0.017244892195 -0.057067498565  0.            ]
+#~  [ 0.013747725636  0.864861726761  0.501821935177  0.            ]
+#~  [ 0.05800935626  -0.501713931561  0.863086342812  0.            ]
+#~  [ 0.              0.              0.              1.            ]]
+#~
+playroom:
+
+
 然后再transformer_3dgs_ply 文件中修改ply场景的旋转矩阵：
 transformer_3dgs_ply cmd:
-python transformer_3dgs_ply.py --in_ply counter.ply --out_ply counter_aligned.ply
+python transform_3dgs_ply.py --in_ply playroom.ply --out_ply playroom_aligned.ply
 
 然后转换成pt文件：
 
 python ply2pt_mip_nerf_scene.py \
-  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned.ply \
-  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned.pt
+  --in_ply /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned_cut.ply \
+  --out_pt /home/fzhi/fzt/3dgs_pipeline/animatable_dataset/rotation/counter_aligned_cut.pt
+
+
+
+
 
 
 

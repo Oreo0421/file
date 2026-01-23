@@ -15,6 +15,7 @@ ActorsHQ（自己从谷歌下）
 python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
 
 更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改,并且对npz文件的trans和oreinted 做适配
+
 python trans_npz_all.py \
   --src pose_00.npz \
   --tgt_npz 01_newformat.npz \
@@ -53,9 +54,9 @@ python scripts/counter/transform_human_sequence.py \
 --start_frame 00000000 \
 --end_frame 00000001
 
-python scripts/room/p2/transform_human_sequence.py \
+python scripts/djr/p2/transform_human_sequence.py \
 --input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
---output_dir /mnt/data_hdd/fzhi/mid/101010/room/p2 \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/djr/p2 \
 --output_format both \
 --start_frame 00000000 \
 --end_frame 00000001
@@ -64,12 +65,12 @@ python scripts/room/p2/transform_human_sequence.py \
 render:
 
 python hugs/renderer/render_sequence_from1camera.py \
-  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/p2/pt" \
-  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/room/room_aligned_cut.pt" \
-  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/test2/top/" \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/"\
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/testp2/top/" \
   --start_frame 00000000\
   --end_frame 00000001\
-  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p2/room_top.json"\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr_topp2.json"\
   --render_mode human_scene
 
 
@@ -161,25 +162,35 @@ Transformation matrix applied:
 使用脚本调整摄像头高度
 python adjust_camera_position_advanced.py --input images_aligned.txt --height 2.5 --output images_top.txt
 
-# 左移0.5米 (Z坐标保持2.500不变)
-python adjust_camera_xy_only.py --input images_top.txt --right -0.5 --output images_left.txt
-# 右移0.5米
-python adjust_camera_xy_only.py --input images_top.txt --right 0.5 --output images_right.txt
-# 前进0.5米
-python adjust_camera_xy_only.py --input images_top.txt --forward 0.5 --output images_forward.txt
-# 后退0.5米
-python adjust_camera_xy_only.py --input images_top.txt --forward -0.5 --output images_backward.txt
+set_camera_tx_ty_tz_over_head.py 根据人物trans输出相机位置
+python set_camera_tx_ty_tz_over_head.py \
+  --images_txt images_djr.txt \
+  --human_ply /mnt/data_hdd/fzhi/mid/101010/djr/p2/ply/00000000.ply \
+  --out_images_txt mages_djr_overhead.txt \
+  --image_id 0 \
+  --distance 2.5 \
+  --mode head \
+  --up_axis 2 \
+  --top_percent 0.5
 
+room:
+/mnt/data_hdd/fzhi/mid/101010/room/p2
 
-./extract_camera_from_sparse_images.sh \
-images_djr.txt \
-djr_top.json \
-/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
+python set_camera_tx_ty_tz_over_head.py \
+  --images_txt images.txt \
+  --human_ply /mnt/data_hdd/fzhi/mid/101010/djr/p3/ply/00000000.ply \
+  --out_images_txt images_overhead.txt \
+  --image_id 0 \
+  --distance 2.5 \
+  --mode head \
+  --up_axis 2 \
+  --top_percent 0.5
+
 
 chmod +x extract_camera_from_sparse_images.sh
 ./extract_camera_from_sparse_images.sh \
-images_top.txt \
-djr_top.json \
+images_overhead.txt \
+djr_topp3.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ./extract_camera_from_sparse_images.sh \

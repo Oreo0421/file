@@ -1,0 +1,162 @@
+align:
+#djr p1:
+python scripts/djr/p1/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/djr/p1 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+#djrp2:
+
+python scripts/djr/p2/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/djr/p2 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+#p3:
+python scripts/djr/p3/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/djr/p3 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+#Room p1:
+python scripts/room/p1/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/room/p1 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+
+#p2:
+python scripts/room/p2/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/room/p2 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+#garden:
+
+python scripts/garden/p1/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/garden/p1 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+
+#playroom
+python scripts/playroom/p1/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/playroom/p1 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+#counter:
+
+python scripts/counter/p1/transform_human_sequence.py \
+--input_dir /mnt/data_hdd/fzhi/human_data/101010/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+--output_dir /mnt/data_hdd/fzhi/mid/101010/counter/p1 \
+--output_format both \
+--start_frame 00000000 \
+--end_frame 00000001
+
+
+
+
+render:
+#djr p1:
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p1/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json"\
+  --render_mode human_scene
+
+#p2:
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p2/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p2/top.json"\
+  --render_mode human_scene  
+
+#p3：
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p3/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p3/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p3/top.json"\
+  --render_mode human_scene
+
+#room 
+
+#p1:
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/room/room.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/p1/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p1/top.json"\
+  --render_mode human_scene
+
+
+#p2:
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/p2/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/room/room.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/room/p2/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room_top_centerp2.json"\
+  --render_mode human_scene
+
+
+#counter:
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/counter/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/counter/counter.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/counter/p1/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/counter/p1/top.json"\
+  --render_mode human_scene
+
+#playroom
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/playroom/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/playroom/playroom.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/playroom/p1/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/playroom/p1/top.json"\
+  --render_mode human_scene
+
+#garden
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/garden/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/garden/garden.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/garden/p1/top/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/garden/p1/top.json"\
+  --render_mode human_scene
+
+

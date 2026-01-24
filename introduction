@@ -88,25 +88,27 @@ python hugs/renderer/gs_renderer_debugV1.py        --human_pt output/gs_out/huma
 
 旋转矩阵：
 
-djr_position1 = np.array([
-    [ 0.07272808,  0.85860103,  0.50745928, -1.07296634],
-    [-0.99589914,  0.03506722,  0.08339798,  1.20860124],
-    [ 0.05381041, -0.51144361,  0.85763037,  0.28935778],
-    [ 0.0,         0.0,         0.0,         1.0]
+djr_position1 
+    T_total = np.array([
+        [ 0.072728075087,  0.858601033688,  0.507459282875, -1.072966337204],
+        [-0.995899140835,  0.035067219287,  0.083397984505,  1.208601236343],
+        [ 0.053810410202, -0.511443614960,  0.857630372047,  0.289357781410],
+        [ 0.0,             0.0,             0.0,             1.0]], dtype=np.float64)
+
+djr_position2 
+T_total = np.array([
+    [ 0.097174286842,  0.776527106762,  0.622545421124, -0.031882703304],
+    [-0.883775293827,  0.354985624552, -0.304838359356,  0.666232705116],
+    [-0.457709938288, -0.520567834377,  0.720770955086,  4.502630233765],
+    [ 0.0,             0.0,             0.0,             1.0            ]
 ])
 
-djr_position2 = np.array([
-    [ 0.09717429,  0.77652711,  0.62254542, -0.0318827 ],
-    [-0.88377529,  0.35498562, -0.30483836,  0.66623271],
-    [-0.45770994, -0.52056783,  0.72077096,  4.50263023],
-    [ 0.0,         0.0,         0.0,         1.0]
-])
-
-djr_position3 = np.array([
-    [-0.15148278,  0.84950942,  0.50535798, -0.74691081],
-    [-0.95895684, -0.00232478, -0.28354260,  0.87331414],
-    [-0.23969728, -0.52756828,  0.81499505, -2.87417722],
-    [ 0.0,         0.0,         0.0,         1.0]
+ p3:
+ T_total =  np.array([
+    [-0.067112356512,  0.846463411812,  0.528200308463, -0.841071732405],
+    [-0.968525243892,  0.071911939214, -0.238301321409,  0.866211993675],
+    [-0.239697277546, -0.527568280697,  0.814995050430, -2.874177217484],
+    [ 0.000000000000,  0.000000000000,  0.000000000000,  1.000000000000]
 ])
 
 playroom:
@@ -154,19 +156,20 @@ Transformation matrix applied:
 4.使用摄像头的四元数生成摄像头json文件,fisheye     op43dgs/submodules/diff-gaussian-rasterization-fisheye
 
 set_camera_tx_ty_tz_over_head.py 根据人物trans输出相机位置
+
 python set_camera_tx_ty_tz_over_head.py \
-  --images_txt images_room.txt \
-  --human_ply /mnt/data_hdd/fzhi/mid/101010/room/p2/ply/00000000.ply \
-  --out_images_txt images_room_centerp2.txt \
+  --images_txt images_djr.txt \
+  --human_ply /mnt/data_hdd/fzhi/mid/101010/djr/p3/ply/00000000.ply \
+  --out_images_txt images_djr_centerp3.txt \
   --image_id 0 \
-  --distance 5 \
+  --distance 3 \
   --mode center \
   --top_percent 0.5
 
 前后左右的生成摄像头
 
 python shift_camera_4dirs_images_txt.py \
-  --images_txt images_djrp3center.txt \
+  --images_txt images_djr_centerp3.txt \
   --out_dir cam_shift_txt \
   --image_id 0 \
   --shift 0.5 \
@@ -182,29 +185,33 @@ cd "$SPARSE_DIR"
 
 chmod +x extract_camera_from_sparse_images.sh
 ./extract_camera_from_sparse_images.sh \
-images_djr_centerp2.txt \
-djr_top_centerp2.json \
+images_djr_centerp3.txt \
+djr_top_centerp3.json \
 /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/
 
 ./extract_camera_from_sparse_images.sh \
-cam_shift_txt/images_djrp3center_backward_0.50m.txt \
+images_djr_centerp3_backward_0.50m.txt \
   djr_p3center_backward.json \
-  "$CAM_DIR"
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera
 ./extract_camera_from_sparse_images.sh \
-  cam_shift_txt/images_djrp3center_forward_0.50m.txt \
+images_djr_centerp3_forward_0.50m.txt \
   djr_p3center_forward.json \
-  "$CAM_DIR"
+/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera
 ./extract_camera_from_sparse_images.sh \
-  cam_shift_txt/images_djrp3center_left_0.50m.txt \
+images_djr_centerp3_left_0.50m.txt \
   djr_p3center_left.json \
-  "$CAM_DIR"
+  /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera
 ./extract_camera_from_sparse_images.sh \
-  cam_shift_txt/images_djrp3center_right_0.50m.txt \
+images_djr_centerp3_right_0.50m.txt \
   djr_p3center_right.json \
-  "$CAM_DIR"
+  /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera
 
 
 ###python run_extract_camera.py  --seq lab --split train  --output output
+
+render所有的djr的场景
+chmod +x render_all_p_all_views.sh
+./render_all_p_all_views.sh
 
 
 scene 转换

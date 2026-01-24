@@ -82,6 +82,42 @@ python hugs/renderer/render_sequence_from1camera.py \
   --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json"\
   --render_mode human_scene
 
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p1/right/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/right.json"\
+  --render_mode human_scene
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p1/left/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/left.json"\
+  --render_mode human_scene
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p1/backward/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/backward.json"\
+  --render_mode human_scene
+
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p1/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p1/forward/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/forward.json"\
+  --render_mode human_scene
+
 #p2:
 python hugs/renderer/render_sequence_from1camera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/" \
@@ -90,6 +126,42 @@ python hugs/renderer/render_sequence_from1camera.py \
   --start_frame 00000000\
   --end_frame 00000001\
   --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p2/top.json"\
+  --render_mode human_scene  
+
+  python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p2/forward/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p2/forward.json"\
+  --render_mode human_scene  
+
+  python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p2/backward/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p2/backward.json"\
+  --render_mode human_scene 
+
+  python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p2/left/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p2/left.json"\
+  --render_mode human_scene  
+
+  python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/djr/p2/pt/" \
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101010/djr/p2/right/" \
+  --start_frame 00000000\
+  --end_frame 00000001\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p2/right.json"\
   --render_mode human_scene  
 
 #p3：

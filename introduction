@@ -28,9 +28,28 @@ python trans_npz_all_fix.py \
 python subsample_npz_stride.py \
   --input 06_13_poses_inplace.npz \
   --stride 5
+#check annotation 是否好用
+
+python check_annotation_pipeline.py \
+  --motion 06_13_poses.npz \
+  --joints /mnt/data_hdd/fzhi/human_data/101010/06_13_poses_inplace_stride5/test_results/pca_20_sigma_2.00/joints/00000000.npy \
+  --scene djr_p1
+SMPL-H
+156 = 52 × 3
+
+python check_annotation_pipeline.py \
+  --motion 06_13_poses.npz \
+  --joints_dir /mnt/data_hdd/fzhi/human_data/101010/06_13_poses_inplace_stride5/test_results/pca_20_sigma_2.00/joints \
+  --joints_pattern "*.npy" \
+  --scene djr_p1 \
+  --frame 0
+#--camera camera/room_top.json \
+
+
 
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
+
 小结：训练了mvhumannet 30个新人物
 
 3.场景/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scene/数据集里面是处理好的场景点云ply文件
@@ -39,9 +58,12 @@ run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.
 1. 拿到人物渲染之后的数据集
 1.1joint :
 
+
 python save_joints_trans_sequence.py \
-  --input_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/test_results/avatarrex_zzr/avatar/thuman4__pose_00_free_view/batch_700000/pca_20_sigma_2.00/joints/ \
-  --output_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/
+  --input_dir /mnt/data_hdd/fzhi/human_data/101010/06_13_poses_inplace_stride5/test_results/pca_20_sigma_2.00/joints \
+  --output_dir /mnt/data_hdd/fzhi/output/101010/06_13_poses_inplace_stride5/djr/p1 \
+  --scene djr_p1
+  --motion 06_13_poses_fix_xyz_stride5.npz #可省略，让他自己推断出来。
 
 1.2joint line to 
 
@@ -145,7 +167,8 @@ Transformation matrix applied:
 
 
 
-4.使用摄像头的四元数生成摄像头json文件,fisheye     op43dgs/submodules/diff-gaussian-rasterization-fisheye
+4.使用摄像头的四元数生成摄像头json文件,fisheye    git:https://github.com/LetianHuang/op43dgs 
+submodule: op43dgs/submodules/diff-gaussian-rasterization-fisheye
 
 set_camera_tx_ty_tz_over_head.py 根据人物trans输出相机位置
 
@@ -158,7 +181,7 @@ python set_camera_tx_ty_tz_over_head.py \
   --mode center \
   --top_percent 0.5
 
-前后左右的生成摄像头
+#前后左右的生成摄像头
 
 python shift_camera_4dirs_images_txt.py \
   --images_txt images_room_centerp2.txt \
@@ -301,46 +324,42 @@ ls /mnt/data2/fzhi/103028/smplx_params_new | head
 conda activate anima3dgs
 cd /home/fzhi/fzt/AnimatableGaussians
 
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/102231 
-
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/103105/
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data2/fzhi/101089/
 
 生成calibration文件
 
 check：
-ls /mnt/data_hdd/fzhi/dataset/102231/calibrations.json
-ls /mnt/data_hdd/fzhi/dataset/102231/smpl_params.npz
- 
-ls /mnt/data2/fzhi/103105/calibrations.json
-ls /mnt/data2/fzhi/103105/smpl_params.npz
+
+ls /mnt/data2/fzhi/101089/calibrations.json
+ls /mnt/data2/fzhi/101089/smpl_params.npz
 
 2.为 101223 新建 configs（只需要改 3 个地方）
 1.复制一份 101010 的配置
-cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians/configs
-cp -r mvhn_101412 mvhn_103105
+cd /home/fzhi/fzt/AnimatableGaussians/configs/
+cp -r mvhn_101020 mvhn_101089
 
 必改 1：subject_name
-subject_name: 103105
+subject_name: 101089
 
 必改 2：data_dir
-data_dir: /mnt/data_hdd/fzhi/dataset/103105
+data_dir: /mnt/data_hdd/fzhi/dataset/101089
 
 必改 3：输出目录（你希望结果放哪）
 
-net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/103105/results/template
+net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/101089/results/template
 
 # avatar.yaml 里：
-pretrained_dir: /mnt/data_hdd/fzhi/dataset/103105/avatar/pretrained
-net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/103105/avatar
+pretrained_dir: /mnt/data_hdd/fzhi/dataset/101089/avatar/pretrained
+net_ckpt_dir: /mnt/data_hdd/fzhi/dataset/101089/avatar
 
 然后 
-tmux new -s train103105
+tmux new -s train_101089
 conda activate anima3dgs
-cd ~/fzt/3dgs_pipeline/animatable_3DGS/anima_yu/AnimatableGaussians
+cd /home/fzhi/fzt/AnimatableGaussians
 运行脚本 记得修改subject name！
 
 chmod +x train_mvhnpp.sh
-./train_mvhnpp.sh mvhn_103105
+./train_mvhnpp.sh mvhn_101089
 
 
 可能会遇到的环境编译问题：
@@ -350,7 +369,7 @@ git clone https://github.com/mkazhdan/PoissonRecon.git
 conda install -c conda-forge libpng jpeg zlib -y
 make pointinterpolant
 ls $CONDA_PREFIX/lib | egrep "libpng|libjpeg|libz" | head
-export LIBRARY_PATH=$CONDA_PREFIX/lib:$LIBRARY_PATH                                                                                                                                                                                                                                                                                         
+export LIBRARY_PATH=$CONDA_PREFIX/lib:$LIBRARY_PATH                                                                                                                                                                                                                         
 export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH                                                                                                                                                 
 export CPATH=$CONDA_PREFIX/include:$CPATH                                                                                                                                                                 
 export C_INCLUDE_PATH=$CONDA_PREFIX/include:$C_INCLUDE_PATH                                                                                                                                               
@@ -366,8 +385,6 @@ chmod +x ./bins/PointInterpolant
 solve(smpl_model.lbs_weights.shape[-1], "./bins/PointInterpolant")
 
 
-https://github.com/LetianHuang/op43dgs 
-
 # detach: Ctrl+B D
 
 
@@ -376,10 +393,10 @@ tmux ls
 tmux attach -t train10100
 
 
-tmux new -s mvhn101010
 然后再跑脚本
 
 export CUDA_VISIBLE_DEVICES=0
+
 在那台电脑运行这个。
 
 ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
@@ -403,8 +420,13 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101032
 =======
 101177 miko
-103028
-103105
+101089
+
+
+
+
+
+
 
 
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
@@ -431,4 +453,33 @@ test:
 python tools/test.py configs/visdrone.py \
                     /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth \
                      --show-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/test
+
+python tools/analysis_tools/optimize_anchors.py configs/custom_dataset/yolov5_s-v61_syncbn_fast_1xb32-100e_cat.py \
+                                                --algorithm v5-k-means \
+                                                --input-shape 640 640 \
+                                                --prior-match-thr 4.0 \
+                                                --out-dir work_dirs/dataset_analysis_cat
+
+
+数据EDA：
+
+python eda_coco.py \
+  --ann /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/data/annotations/train.json \
+  --imgdir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/data/images/\
+  --out runs/eda_train
+
+  yolo 评估
+  bbox_mAP：
+  python tools/test.py \
+    configs/visdrone.py \
+   /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth
+  fps：
+ python tools/analysis_tools/benchmark.py \
+  configs/visdrone.py \
+  /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_100.pth
+  可视化：
+  python tools/test.py \
+  configs/visdrone.py \
+  /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_100.pth \
+  --show-dir debug_vis
 

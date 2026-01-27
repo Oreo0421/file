@@ -175,7 +175,6 @@ python hugs/renderer/render_sequence_from1camera.py \
   --render_mode human_scene
 
 #room 
-
 #p1:
 python hugs/renderer/render_sequence_from1camera.py \
   --human_pt_dir "/mnt/data_hdd/fzhi/mid/101010/room/p1/pt/" \

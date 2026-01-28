@@ -13,6 +13,21 @@ ActorsHQ（自己从谷歌下）
 3.如果需要换动作序列
 
 python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
+pose:69-24 walkleft 69-23turnright
+79-28 drink 
+90-16 fallonface 
+111-11 inchairstand up 
+90-18rugpull 
+143-18 downandgetup
+80-19 brooming 
+81-7 pullobject 
+82-7push object
+80-50 cleanwindows 
+115-6 up bend knee 
+115-1 up bend waist
+139-17 upfromground
+07-07 walk
+137-33 old man walk
 
 更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改,并且对npz文件的trans和oreinted 做适配
 trans 替换
@@ -34,6 +49,7 @@ python check_annotation_pipeline.py \
   --motion 06_13_poses.npz \
   --joints /mnt/data_hdd/fzhi/human_data/101010/06_13_poses_inplace_stride5/test_results/pca_20_sigma_2.00/joints/00000000.npy \
   --scene djr_p1
+
 SMPL-H
 156 = 52 × 3
 
@@ -65,12 +81,6 @@ python save_joints_trans_sequence.py \
   --scene djr_p1
   --motion 06_13_poses_fix_xyz_stride5.npz #可省略，让他自己推断出来。
 
-1.2joint line to 
-
-python add_line2joint_sequence.py \
-  --in_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/npy/transformed/ \
-  --out_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/output_combine/joint/pt/ \
-  --start 0 --end 99
 
 ps:如果帧数不是 0~99？怎么查？
 看看 .npy 的最大编号，然后替换 –end。
@@ -476,7 +486,7 @@ python eda_coco.py \
  python tools/analysis_tools/benchmark.py \
   configs/visdrone.py \
   /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_100.pth
-  
+
   可视化：
   python tools/test.py \
   configs/visdrone.py \

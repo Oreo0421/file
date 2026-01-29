@@ -1,0 +1,54 @@
+写一个全自动的脚本，首先在conda activate anim3dgs的环境下
+对
+/home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/test/
+这个目录下面的所有npz动作序列执行
+在/home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians目录下执行
+python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
+xxx是人物的subject name
+每次执行都需要在avatar.yamal配置文件中修改。
+然后输出全部的动作序列。以及对应的名字是
+  output_dir: /mnt/data_hdd/fzhi/human_data/101223/walk/test_results
+  101223是subject name。walk是动作序列
+    pose_data:
+    data_path: /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/test/walk.npz
+    需要每次在avatar yaml中修改pose data的path，把/home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/test/下的所有pose序列全输出了，
+
+
+    然后 生成人物的不同pose的npy文件
+    然后我们切换conda activate hugs，在hugs 环境下
+    切换到/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/ 目录下执行
+
+python scripts/human_trans/djr/p1/transform_human_sequence.py \
+	--input_dir /mnt/data_hdd/fzhi/human_data/101223/walk/test_results/pca_20_sigma_2.00/posed_gaussians/ \
+	--output_dir /mnt/data_hdd/fzhi/mid/101223/walk/djr/p1 \
+	--output_format both \
+	--start_frame 00000000 \
+	--end_frame 00000099
+
+	frame是固定的0-99.
+	在human_trans 下的所有目录执行
+	并且生成在对应的位置--output_dir /mnt/data_hdd/fzhi/mid/101223/walk/djr/p1 
+	如这个，如果pose修改，也跟着改。
+	然后一个动作序列完成后，分别完成前面所有的动作序列
+
+	然后执行类似的你给我的这个渲染全部场景的脚本，
+python hugs/renderer/render_sequence_from1camera.py \
+  --human_pt_dir "/mnt/data_hdd/fzhi/mid/101223/walk/djr/p1/pt/"\
+  --scene_pt "/home/fzhi/fzt/3dgs_pipeline/animatable_dataset/scenefixed/djr/djr.pt" \
+  --output_dir "/mnt/data_hdd/fzhi/output/101223/walk/djr/p1/image/top/" \
+  --start_frame 00000000\
+  --end_frame 00000099\
+  --camera_json "/home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json"\
+  --render_mode human_scene
+	渲染全部的场景和camera下的所有摄像头，然后生成到对应的文件夹，
+
+
+	然后执行
+python scripts/joint_trans/save_joints_trans_sequence_v2.py \
+  --input_dir /mnt/data_hdd/fzhi/human_data/101223/walk/test_results/pca_20_sigma_2.00/joints \
+  --output_dir /mnt/data_hdd/fzhi/output/101223/walk/djr/p1 \
+  --scene djr_p1 \
+  --pose_name walk
+  自己读取pose name去填写
+  然后一个动作序列完成后，分别完成前面所有的动作序列
+

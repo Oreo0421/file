@@ -133,6 +133,21 @@ def process_joints_folder(
             f"Available keys example: {list(SCENE_TRANSFORMS.keys())[:10]}"
         )
     trans_matrix = np.array(SCENE_TRANSFORMS[scene_name], dtype=np.float64)
+    # ---- Print transform used (only once) ----
+    if not hasattr(process_joints_folder, "_printed_T"):
+        process_joints_folder._printed_T = set()
+
+    key = (subject_name, pose_name, scene_name)
+    if key not in process_joints_folder._printed_T:
+        process_joints_folder._printed_T.add(key)
+        print("\n[Scene Transform Used]")
+        print(f"  subject   : {subject_name}")
+        print(f"  pose_name : {pose_name}")
+        print(f"  scene     : {scene_name}")
+        np.set_printoptions(precision=12, suppress=True)
+        print("  T_align:\n", trans_matrix)
+        print("")
+
 
     # Collect 8-digit .npy files (e.g., 00000000.npy)
     pattern = re.compile(r"^\d{8}\.npy$")

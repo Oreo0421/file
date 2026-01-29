@@ -12,7 +12,7 @@ ActorsHQ（自己从谷歌下）
 
 3.如果需要换动作序列
 
-python main_avatar_joint.py -c configs/mvhn_101010/avatar.yaml --mode=test
+python main_avatar_joint1.py -c configs/mvhn_101223/avatar.yaml --mode=test
 
 pose:69-24 walkleft x
 69-23turnright  x
@@ -31,11 +31,9 @@ pose:69-24 walkleft x
 07-07 walk
 137-33 old man walk
 
-chmod +x batch.sh
-
-# 或者指定输出目录
-./batch.sh /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/transpose//pose_00.npz  /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/transpose/1/
-
+一键渲染
+chmod +x run_full_dataset_generation.sh
+./run_full_dataset_generation.sh 101223
 
 更改avatar.yaml文件里pose- sequence的npz文件地址，L69 save ply 更改,并且对npz文件的trans和oreinted 做适配
 trans 替换
@@ -61,8 +59,13 @@ python check_annotation_pipeline.py \
 SMPL-H
 156 = 52 × 3
 
-
-
+python viz_joints_sequence.py \
+  --joints_dir /mnt/data_hdd/fzhi/output/101223/upfromwaist/counter/p1/joint/npy/transformed/ \
+  --kin_parent /mnt/data_hdd/fzhi/human_data/101223/walk/test_results/pca_20_sigma_2.00/kin_parent.npy \
+  --out_dir /mnt/data_hdd/fzhi/output/101223/upfromwaist/counter/p1/joint/joint_viz_only_xzy_flipy_flipz_skel \
+  --swap_joints_axes xzy \
+  --flip_joints=-y,-z \
+  --start 0 --end 200 --step 5
 
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton

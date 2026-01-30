@@ -12,8 +12,9 @@ ActorsHQ（自己从谷歌下）
 
 3.如果需要换动作序列
 
-python main_avatar_joint.py -c configs/mvhn_101020/avatar.yaml --mode=test
+python main_avatar_joint.py -c configs/mvhn_100931/avatar.yaml --mode=test
 
+python main_avatar_joint.py -c configs/1/avatar.yaml --mode=test
 pose:69-24 walkleft x
 69-23turnright  x
 79-28 drink 
@@ -381,6 +382,9 @@ export CPATH=$CONDA_PREFIX/include:$CPATH
 export C_INCLUDE_PATH=$CONDA_PREFIX/include:$C_INCLUDE_PATH                                                                                                                                               
 export CPLUS_INCLUDE_PATH=$CONDA_PREFIX/include:$CPLUS_INCLUDE_PATH  
 
+fisheyes：conda activate hugs
+cd ~/miniconda3/envs/hugs/lib/python3.8/site-packages
+tar xzf ~/diff_gaussian_rasterization_fisheye_pkg.tar.gz
 
 
 在 主目录下，mkdir -p bins
@@ -412,7 +416,7 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 101010 swarm  to do 101477  101883  102023  102231  avatarrex_lbn1.7  avatarrex_lbn2.7  avatarrex_zzr
 101223 swarm
 101020 miko todo：  101089  101177  101207  101412  102231
-
+100931 jky 101032 101042 204313 101029
 
 人物切换：
 修改avatar的test的data dir，pose不用换，outdir 还有 prev_ckpt
@@ -434,6 +438,12 @@ env -u LD_LIBRARY_PATH /usr/bin/tmux new -s 101020
 chmod +x run_full_dataset_generation_mikro.sh
 export CUDA_VISIBLE_DEVICES=0 
 ./run_full_dataset_generation_mikro.sh 101020
+
+jky:
+chmod +x run_full_dataset_generation_jky.sh
+export CUDA_VISIBLE_DEVICES=0 
+./run_full_dataset_generation_jky.sh 10
+
 
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
                                               --show-interval 3

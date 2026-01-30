@@ -32,12 +32,12 @@ fi
 # -----------------------
 # Paths (可用环境变量覆盖)
 # -----------------------
-BASE_DIR="${BASE_DIR:-/home/zhiyw/fzt/}"
+BASE_DIR="${BASE_DIR:-/home/zhiyw/fzt}"
 
 ANIM_ROOT="${ANIM_ROOT:-${BASE_DIR}/AnimatableGaussians}"
 HUGS_ROOT="${HUGS_ROOT:-${BASE_DIR}/ml-hugs}"
 
-POSE_DIR="${POSE_DIR:-${ANIM_ROOT}/data_body/pose/AMASS/CMU/omilabpose}"
+POSE_DIR="${POSE_DIR:-${ANIM_ROOT}/data_pose/AMASS/CMU/omilabpose}"
 
 # subject config（作为模板，不会写回；脚本会生成临时 yaml）
 CONFIG_SRC="${CONFIG_SRC:-${ANIM_ROOT}/configs/mvhn_${SUBJECT}/avatar.yaml}"
@@ -46,7 +46,7 @@ CONFIG_SRC="${CONFIG_SRC:-${ANIM_ROOT}/configs/mvhn_${SUBJECT}/avatar.yaml}"
 PCA_DIR="${PCA_DIR:-pca_20_sigma_2.00}"
 
 # 输出根目录
-HDD_BASE="${HDD_BASE:-/mnt/data_hdd/zhiyw/fzhi/}"
+HDD_BASE="${HDD_BASE:-/mnt/data_hdd/zhiyw/fzhi}"
 HUMAN_DATA_ROOT="${HUMAN_DATA_ROOT:-${HDD_BASE}/human_data}"
 MID_ROOT="${MID_ROOT:-${HDD_BASE}/mid}"
 OUT_ROOT="${OUT_ROOT:-${HDD_BASE}/output}"

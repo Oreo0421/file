@@ -40,7 +40,7 @@ HUGS_ROOT="${HUGS_ROOT:-${BASE_DIR}/ml-hugs}"
 POSE_DIR="${POSE_DIR:-${ANIM_ROOT}/data_pose/AMASS/CMU/omilabpose}"
 
 # subject config（作为模板，不会写回；脚本会生成临时 yaml）
-CONFIG_SRC="${CONFIG_SRC:-${ANIM_ROOT}/configs/mvhn_${SUBJECT}/avatar.yaml}"
+CONFIG_SRC="${CONFIG_SRC:-${ANIM_ROOT}/configs/${SUBJECT}/avatar.yaml}"
 
 # main_avatar_joint 输出目录名（必须匹配你的工程）
 PCA_DIR="${PCA_DIR:-pca_20_sigma_2.00}"

@@ -95,6 +95,7 @@ python amass_to_hybrik_with_rendered_joints.py \
     --scene djr_p1 \
     --subject_name 101010 \
     --pose_name brooming
+
 批量生成smpl
 python batch_process_smpl.py \
     --subject 102231 \
@@ -107,13 +108,21 @@ python batch_process_smpl.py \
 check：
 
 python verify_smpl.py \
-    --smpl_npz /mnt/data_hdd/fzhi/1/brooming_v2/101010_brooming_smpl.npz \
-    --joints_npz /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/joint/npz/101010_brooming_djr_p1_all_transformed_joints \
-    --camera_npz /mnt/data_hdd/fzhi/1/brooming_v2/101010_brooming_camera.npz \
+    --smpl_npz /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/smpl/top/101010_brooming_smpl.npz \
+    --joints_npz /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/joint/npz/101010_brooming_djr_p1_all_transformed_joints.npz \
+    --camera_npz /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/smpl/top/101010_brooming_camera.npz \
     --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
     --output_dir /mnt/data_hdd/fzhi/1/brooming_v2/verify \
     --image_dir /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/image/top \
     --num_vis_frames 10
+
+看哪个joint更适合skateformer
+python compare_two_joint_npz.py \
+  --a /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/smpl/top/101010_brooming_joints.npz \
+  --b /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/joint/npz/101010_brooming_djr_p1_all_transformed_joints.npz \
+  --kin_parent /mnt/data_hdd/fzhi/human_data/101010/brooming/test_results/pca_20_sigma_2.00/kin_parent.npy
+
+结论两个生成的都一样
 
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
@@ -554,13 +563,12 @@ python consolidate_hybrik_data_with_images.py \
 └── stats.json
 =======================================================================
 skateformer:
-python pack_my22_to_dataset_npz.py \
-  --input_glob "/mnt/data_hdd/fzhi/output/**/joint/npz/*_all_transformed_joints.npz" \
-  --out_npz    "/mnt/data_hdd/fzhi/skateformer_data/dataset_22j.npz" \
-  --T 100 \
-  --test_ratio 0.2 \
-  --seed 1 \
-  --save_label_map
+  python pack_my22_to_dataset_npz.py \
+    --input_glob "/mnt/data_hdd/fzhi/output/101010/**/smpl/*/*_joints.npz" \
+    --out_npz /mnt/data_hdd/fzhi/skateformer_data/101010/dataset_22j.npz \
+    --require_key joints_3d_world \
+    --test_ratio 0.2 \
+    --save_label_map
 
 /mnt/data_hdd/fzhi/skateformer_data/dataset_22j.npz
 

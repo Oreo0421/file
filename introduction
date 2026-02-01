@@ -86,58 +86,34 @@ python export_smpl_world_cam_both.py \
 
 训练用： cam_As
 
-python amass_to_hybrik_smpl.py \
-    --amass_npz /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz  \
-    --scene djr_p1 \
+python amass_to_hybrik_with_rendered_joints.py \
+    --amass_npz /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz \
+    --rendered_joints_dir /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/joint/npy/transformed \
     --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json \
-    --output_dir /mnt/data_hdd/fzhi/1/brooming \
+    --output_dir /mnt/data_hdd/fzhi/1/brooming_v2 \
+    --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+    --scene djr_p1 \
     --subject_name 101010 \
-    --pose_name brooming \
-    --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/
+    --pose_name brooming
+批量生成smpl
+python batch_process_smpl.py \
+    --subject 102231 \
+    --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+    --amass_base_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose \
+    --camera_base_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera \
+    --output_base_dir /mnt/data_hdd/fzhi/output
 
 
 check：
 
-
-python verify_smpl_gt_with_mapping.py \
-  --smpl_npz_original /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz \
-  --joints_dir_original /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/original/ \
-  --joints_dir_transformed /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/transformed/ \
-  --scene_transforms_py /mnt/data_hdd/fzhi/scene_transforms.py \
-  --scene room_p1 \
-  --model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
-  --gender neutral \
-  --kin_parent /mnt/data_hdd/fzhi/human_data/101223/brooming/test_results/pca_20_sigma_2.00/kin_parent.npy \
-  --save_joint_index /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/joint_index_22.npy
-
-python check_cam_as_vs_joints.py \
-  --cam_as_npz /mnt/data_hdd/fzhi/smpl_for_hybrik/brooming/room/p1/top/smpl_room_p1_cam_As_0_99.npz \
-  --joints_dir_transformed /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/transformed/ \
-  --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p1/top.json \
-  --joint_index_22 /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/joint_index_22.npy \
-  --model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
-  --gender neutral \
-  --num_betas 10 \
-  --save_gt_cam_dir /mnt/data_hdd/fzhi/output/1/brooming/room/p1/joint/npy/cam_from_world_top/
-
-python diagnose_camera_matrix_convention.py \
-  --cam_as_npz /mnt/data_hdd/fzhi/smpl_for_hybrik/brooming/room/p1/top/smpl_room_p1_cam_As_0_99.npz \
-  --joints_dir_transformed /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/transformed/ \
-  --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p1/top.json \
-  --joint_index_22 /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/joint_index_22.npy \
-  --model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
-  --gender neutral \
-  --num_betas 10
-
-
-
-python viz_joints_sequence.py \
-  --joints_dir /mnt/data_hdd/fzhi/output/101223/upfromwaist/counter/p1/joint/npy/transformed/ \
-  --kin_parent /mnt/data_hdd/fzhi/human_data/101223/walk/test_results/pca_20_sigma_2.00/kin_parent.npy \
-  --out_dir /mnt/data_hdd/fzhi/output/101223/upfromwaist/counter/p1/joint/joint_viz_only_xzy_flipy_flipz_skel \
-  --swap_joints_axes xzy \
-  --flip_joints=-y,-z \
-  --start 0 --end 200 --step 5
+python verify_smpl.py \
+    --smpl_npz /mnt/data_hdd/fzhi/1/brooming_v2/101010_brooming_smpl.npz \
+    --joints_npz /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/joint/npz/101010_brooming_djr_p1_all_transformed_joints \
+    --camera_npz /mnt/data_hdd/fzhi/1/brooming_v2/101010_brooming_camera.npz \
+    --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+    --output_dir /mnt/data_hdd/fzhi/1/brooming_v2/verify \
+    --image_dir /mnt/data_hdd/fzhi/output/101010/brooming/djr/p1/image/top \
+    --num_vis_frames 10
 
 
 run main_avatar_joint.py to make 3d joint +ply, then use addline2joint sequence.py to make 3d skeleton
@@ -484,18 +460,21 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 
 
 1已完成数据集：
-101010 swarm  to do     avatarrex_lbn1.7  avatarrex_lbn2.7  
+101010 swarm  to do      
 101223 swarm
 101477 swarm
 101883 swarm
 102023 swarm
 102231 swarm
+avatarrex_lbn1 swarm
+avatarrex_lbn2 swarm
 
 101020 miko 
 todo：  101089  101177  101207  101412  102231
 
 
 100931 jky 101032 101042 204313 101029
+
 avatarrex_zzr jky 
 
 ./run_full_dataset_generation.sh 
@@ -525,7 +504,70 @@ chmod +x run_full_dataset_generation_jky.sh
 export CUDA_VISIBLE_DEVICES=0 
 ./run_full_dataset_generation_jky.sh 10
 
+=====================================================================
+训练hybrik的数据集处理：
 
+python consolidate_hybrik_data.py \
+    --input_base /mnt/data_hdd/fzhi/output \
+    --subject 101010 \
+    --output_dir /mnt/data_hdd/fzhi/hybrik_data \
+    --val_ratio 0.1
+```
+
+---
+
+## 输出文件
+```
+/mnt/data_hdd/fzhi/hybrik_data/
+├── 101010_train.json      # 训练集 (JSON)
+├── 101010_val.json        # 验证集 (JSON)
+├── 101010_all.json        # 全部数据 (JSON)
+├── 101010_train.pkl       # 训练集 (PKL)
+├── 101010_val.pkl         # 验证集 (PKL)
+├── 101010_all.pkl         # 全部数据 (PKL)
+└── 101010_stats.json      # 统计信息
+
+
+python consolidate_hybrik_data_with_images.py \
+    --input_base /mnt/data_hdd/fzhi/output \
+    --subject 101010 \
+    --output_dir /mnt/data_hdd/fzhi/hybrik_data \
+    --val_ratio 0.1
+```
+
+---
+
+## 输出结构
+```
+/mnt/data_hdd/fzhi/hybrik_data/101010/
+├── images/
+│   ├── 00000001.png
+│   ├── 00000002.png
+│   ├── ...
+│   └── 00052000.png
+├── train.json
+├── val.json
+├── all.json
+├── train.pkl
+├── val.pkl
+├── all.pkl
+└── stats.json
+=======================================================================
+skateformer:
+python pack_my22_to_dataset_npz.py \
+  --input_glob "/mnt/data_hdd/fzhi/output/**/joint/npz/*_all_transformed_joints.npz" \
+  --out_npz    "/mnt/data_hdd/fzhi/skateformer_data/dataset_22j.npz" \
+  --T 100 \
+  --test_ratio 0.2 \
+  --seed 1 \
+  --save_label_map
+
+/mnt/data_hdd/fzhi/skateformer_data/dataset_22j.npz
+
+/mnt/data_hdd/fzhi/skateformer_data/dataset_22j_label_map.json（动作名→id）
+
+
+=======================================================================
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
                                               --show-interval 3
 

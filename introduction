@@ -413,11 +413,21 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 
 
 1已完成数据集：
-101010 swarm  to do 101477  101883  102023  102231  avatarrex_lbn1.7  avatarrex_lbn2.7  avatarrex_zzr
+101010 swarm  to do     avatarrex_lbn1.7  avatarrex_lbn2.7  
 101223 swarm
-101020 miko todo：  101089  101177  101207  101412  102231
-100931 jky 101032 101042 204313 101029
+101477 swarm
+101883 swarm
+102023 swarm
+102231 swarm
 
+101020 miko 
+todo：  101089  101177  101207  101412  102231
+
+
+100931 jky 101032 101042 204313 101029
+avatarrex_zzr jky 
+
+./run_full_dataset_generation.sh 
 人物切换：
 修改avatar的test的data dir，pose不用换，outdir 还有 prev_ckpt
 以及train 里面的所有的路径

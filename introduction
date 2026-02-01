@@ -59,6 +59,77 @@ python check_annotation_pipeline.py \
 
 SMPL-H
 156 = 52 × 3
+smpl生成：
+
+python export_smpl_world_cam_both.py \
+  --input_npz /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz \
+  --scene_transforms_py /mnt/data_hdd/fzhi/scene_transforms.py \
+  --out_dir /mnt/data_hdd/fzhi/smpl/brooming/gt_smpl_all \
+  --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json \
+  --cam_index 0
+
+  python export_smpl_world_cam_0_99.py \
+  --src_npz /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz \
+  --scene_transforms_py /mnt/data_hdd/fzhi/scene_transforms.py \
+  --scene room_p1 \
+  --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json \
+  --out_dir /mnt/data_hdd/fzhi/smpl_for_hybrik/101223/brooming/room/p1/top/
+
+
+  python batch_export_smpl_for_hybrik_allp.py \
+  --motion_root /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/ \
+  --camera_root /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/ \
+  --scene_transforms_py /mnt/data_hdd/fzhi/scene_transforms.py \
+  --out_root /mnt/data_hdd/fzhi/smpl_for_hybrik \
+  --recursive \
+  --start 0 --end 99
+
+训练用： cam_As
+
+python amass_to_hybrik_smpl.py \
+    --amass_npz /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz  \
+    --scene djr_p1 \
+    --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/djr/p1/top.json \
+    --output_dir /mnt/data_hdd/fzhi/1/brooming \
+    --subject_name 101010 \
+    --pose_name brooming \
+    --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/
+
+
+check：
+
+
+python verify_smpl_gt_with_mapping.py \
+  --smpl_npz_original /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose/brooming.npz \
+  --joints_dir_original /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/original/ \
+  --joints_dir_transformed /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/transformed/ \
+  --scene_transforms_py /mnt/data_hdd/fzhi/scene_transforms.py \
+  --scene room_p1 \
+  --model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+  --gender neutral \
+  --kin_parent /mnt/data_hdd/fzhi/human_data/101223/brooming/test_results/pca_20_sigma_2.00/kin_parent.npy \
+  --save_joint_index /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/joint_index_22.npy
+
+python check_cam_as_vs_joints.py \
+  --cam_as_npz /mnt/data_hdd/fzhi/smpl_for_hybrik/brooming/room/p1/top/smpl_room_p1_cam_As_0_99.npz \
+  --joints_dir_transformed /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/transformed/ \
+  --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p1/top.json \
+  --joint_index_22 /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/joint_index_22.npy \
+  --model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+  --gender neutral \
+  --num_betas 10 \
+  --save_gt_cam_dir /mnt/data_hdd/fzhi/output/1/brooming/room/p1/joint/npy/cam_from_world_top/
+
+python diagnose_camera_matrix_convention.py \
+  --cam_as_npz /mnt/data_hdd/fzhi/smpl_for_hybrik/brooming/room/p1/top/smpl_room_p1_cam_As_0_99.npz \
+  --joints_dir_transformed /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/npy/transformed/ \
+  --camera_json /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera/room/p1/top.json \
+  --joint_index_22 /mnt/data_hdd/fzhi/output/101223/brooming/room/p1/joint/joint_index_22.npy \
+  --model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+  --gender neutral \
+  --num_betas 10
+
+
 
 python viz_joints_sequence.py \
   --joints_dir /mnt/data_hdd/fzhi/output/101223/upfromwaist/counter/p1/joint/npy/transformed/ \

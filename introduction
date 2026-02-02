@@ -466,7 +466,7 @@ export CUDA_VISIBLE_DEVICES=0
 在那台电脑运行这个。
 
 ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
-
+=======================================================================
 
 1已完成数据集：
 101010 swarm  to do      
@@ -512,6 +512,38 @@ jky:
 chmod +x run_full_dataset_generation_jky.sh
 export CUDA_VISIBLE_DEVICES=0 
 ./run_full_dataset_generation_jky.sh 10
+
+=================================================================
+sam 3d body:
+token:
+
+
+# Run demo script with default ViTdet detector and MoGe2 FOV model
+python demo.py \
+    --image_folder  /mnt/data_hdd/fzhi/sam3dbody/img/\
+    --output_folder /mnt/data_hdd/fzhi/sam3dbody/result/ \
+    --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
+    --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt
+
+export PYTHONPATH=$(pwd)/sam3:$PYTHONPATH
+# To use SAM3 as the detector to align with online playground of SAM3D
+python demo.py \
+    --image_folder  /home/fzhi/fzt/sam-3d-body/img/ \
+    --output_folder /home/fzhi/fzt/sam-3d-body/result/ \
+    --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
+    --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt \
+    --detector_name sam3
+
+
+
+
+
+
+
+
+
+
+
 
 =====================================================================
 训练hybrik的数据集处理：
@@ -564,7 +596,7 @@ python consolidate_hybrik_data_with_images.py \
 =======================================================================
 skateformer:
   python pack_my22_to_dataset_npz.py \
-    --input_glob "/mnt/data_hdd/fzhi/output/101010/**/smpl/*/*_joints.npz" \
+    --input_glob "/mnt/data_hdd/fzhi/output/*/*/*/joint/npz/*_all_transformed_joints.npz" \
     --out_npz /mnt/data_hdd/fzhi/skateformer_data/101010/dataset_22j.npz \
     --require_key joints_3d_world \
     --test_ratio 0.2 \
@@ -576,6 +608,28 @@ skateformer:
 
 
 =======================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 python tools/analysis_tools/browse_dataset.py configs/VisDrone.py \
                                               --show-interval 3
 

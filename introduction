@@ -547,16 +547,16 @@ python demo.py \
     --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
     --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt \
     --detector_name sam3
+    
+=======================================================================
 
+camera hmr
 
-
-
-
-
-
-
-
-
+python consolidate_camerahmr_data.py \
+    --input_base /mnt/data_hdd/fzhi/output \
+    --subject 101010 \
+    --output_dir /mnt/data_hdd/fzhi/camerahmr_data \
+    --val_ratio 0.1
 
 
 =====================================================================

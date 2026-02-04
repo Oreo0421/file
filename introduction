@@ -98,7 +98,7 @@ python amass_to_hybrik_with_rendered_joints.py \
 
 批量生成smpl
 python batch_process_smpl.py \
-    --subject 102231 \
+    --subject 203915 \
     --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
     --amass_base_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose \
     --camera_base_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera \
@@ -473,30 +473,63 @@ chmod +x run_full_dataset_generation.sh
 
 1已完成数据集：
 swarm
-101010         
-101223 
-101477 
-101883 
-102023 
-102231 
-avatarrex_lbn1 
-avatarrex_lbn2 
-
+101010  smlp       
+101223  smlp
+101477  smlp
+101883  smlp
+102023  smlp
+102231  smlp
+avatarrex_lbn1 smlp
+avatarrex_lbn2 smlp
 204313 
-204112
-203915
+204112 smlp
+203915 smlp
+
+101042
+101032
+
 
 101029
+100832
+
+100834
+100836
+
+100840
+100990
+
+drwxr-xr-x 2 root root 0 Feb  2 15:26 100832
+drwxr-xr-x 2 root root 0 Feb  2 15:28 100834
+drwxr-xr-x 2 root root 0 Feb  2 15:30 100836
+drwxr-xr-x 2 root root 0 Feb  2 15:32 100837
+drwxr-xr-x 2 root root 0 Feb  2 15:33 100840
+drwxr-xr-x 2 root root 0 Feb  2 15:09 100990
+
+drwxr-xr-x 2 root root 0 Jan 19 14:44 101177
+drwxr-xr-x 2 root root 0 Jan 19 14:48 101207
+drwxr-xr-x 2 root root 0 Jan 19 14:52 101412
 
 
-101020 miko 
-todo：  101089  101177  101207  101412  102231
+
+
+miko:
+101020   
+101177
+
+todo:
+101207 
+101412  
+
+
+101089
+
+
 
 jky
 zzr
-100931  
-101032 
-101042 
+100931  [2026-02-03 01:38:00] 
+100990
+
 
 avatarrex_zzr jky 
 
@@ -547,7 +580,7 @@ python demo.py \
     --checkpoint_path ./checkpoints/sam-3d-body-dinov3/model.ckpt \
     --mhr_path ./checkpoints/sam-3d-body-dinov3/assets/mhr_model.pt \
     --detector_name sam3
-    
+
 =======================================================================
 
 camera hmr
@@ -609,7 +642,7 @@ python consolidate_hybrik_data_with_images.py \
 └── stats.json
 =======================================================================
 skateformer:
-  python pack_my22_to_dataset_npz.py \
+  python pack_skateformer_dataset.py \
     --input_glob "/mnt/data_hdd/fzhi/output/*/*/*/joint/npz/*_all_transformed_joints.npz" \
     --out_npz /mnt/data_hdd/fzhi/skateformer_data/101010/dataset_22j.npz \
     --require_key joints_3d_world \

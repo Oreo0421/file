@@ -98,7 +98,7 @@ python amass_to_hybrik_with_rendered_joints.py \
 
 批量生成smpl
 python batch_process_smpl.py \
-    --subject 100832 \
+    --subject 101412 \
     --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
     --amass_base_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose \
     --camera_base_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera \
@@ -387,14 +387,14 @@ ls /mnt/data2/fzhi/103028/smplx_params_new | head
 conda activate anima3dgs
 cd /home/fzhi/fzt/AnimatableGaussians
 
-python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/100836/
+python gen_data/preprocess_mvhnpp.py --mvhn_subj_path /mnt/data_hdd/fzhi/dataset/100840/
 
 生成calibration文件
 
 check：
 
-ls /mnt/data_hdd/fzhi/dataset/100836/calibrations.json
-ls /mnt/data_hdd/fzhi/dataset/100836/smpl_params.npz
+ls /mnt/data_hdd/fzhi/dataset/100837/calibrations.json
+ls /mnt/data_hdd/fzhi/dataset/100837/smpl_params.npz
 
 2.为 101223 新建 configs（只需要改 3 个地方）
 1.复制一份 101010 的配置
@@ -469,10 +469,15 @@ ssh -L 6006:localhost:6008 fzhi@dst-swarm.etit.tu-chemnitz.de
 =======================================================================
 cd fzt/3dgs_pipeline/
 chmod +x run_full_dataset_generation.sh
-./run_full_dataset_generation.sh 100836
+./run_full_dataset_generation.sh 204124
+
 
 1已完成数据集：
 swarm
+
+
+
+
 101010  smpl       
 101223  smpl
 101477  smpl
@@ -484,53 +489,28 @@ avatarrex_lbn2 smpl
 204313 smpl
 204112 smpl
 203915 smpl
-
 101042 smpl
-
 101032 smpl
-
 101029 smpl
 100832 smpl
-
-100834
-100836
-
-
-100837
-100840
-
-
-
-drwxr-xr-x 2 root root 0 Feb  2 15:26 100832
-drwxr-xr-x 2 root root 0 Feb  2 15:28 100834
-drwxr-xr-x 2 root root 0 Feb  2 15:30 100836
-drwxr-xr-x 2 root root 0 Feb  2 15:32 100837
-drwxr-xr-x 2 root root 0 Feb  2 15:33 100840
-drwxr-xr-x 2 root root 0 Feb  2 15:09 100990
-
-drwxr-xr-x 2 root root 0 Jan 19 14:44 101177
-drwxr-xr-x 2 root root 0 Jan 19 14:48 101207
-drwxr-xr-x 2 root root 0 Jan 19 14:52 101412
-
-
-
-
-miko:
+100834 smpl
+100836 smpl
+100837 smpl
+100840 smpl
+101412 smpl
 101020   
 101177
 101207 
-101412
+zzr smpl
+100931 smpl
+100990 smpl
 
+203920 
 
+204124
 
-
-jky
-zzr
-100931  [2026-02-03 01:38:00]  2-5 5pm 
-100990 
-
-
-avatarrex_zzr jky 
+total
+28 16m 12f
 
 ./run_full_dataset_generation.sh 
 人物切换：

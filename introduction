@@ -98,7 +98,7 @@ python amass_to_hybrik_with_rendered_joints.py \
 
 批量生成smpl
 python batch_process_smpl.py \
-    --subject 101412 \
+    --subject 101020 \
     --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
     --amass_base_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose \
     --camera_base_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera \
@@ -478,39 +478,49 @@ swarm
 
 
 
-101010  smpl       
-101223  smpl
-101477  smpl
-101883  smpl
-102023  smpl
-102231  smpl
-avatarrex_lbn1 smpl
-avatarrex_lbn2 smpl
-204313 smpl
-204112 smpl
-203915 smpl
-101042 smpl
-101032 smpl
-101029 smpl
-100832 smpl
-100834 smpl
-100836 smpl
-100837 smpl
-100840 smpl
-101412 smpl
-101020   
-101177
-101207 
-zzr smpl
-100931 smpl
-100990 smpl
-
-203920 
-
-204124
+101010  smpl M      
+101223  smpl m .
+101477  smpl m
+101883  smpl m
+102023  smpl m
+102231  smpl m
+avatarrex_lbn1 smpl F .
+avatarrex_lbn2 smpl F .
+204313 smpl f
+204112 smpl f
+203915 smpl f
+101042 smpl M 
+101032 smpl M
+101029 smpl f
+100832 smpl F
+100834 smpl M
+100836 smpl F
+100837 smpl M
+100840 smpl F
+101412 smpl m
+101020 smpl M
+101177 smpl m
+101207 smpl m
+ smpl    M . xx
+100931  M x
+100990  F x
+203920 smpl f .
+204124 smpl f
 
 total
 28 16m 12f
+6f5m
+avatarrex_lbn1,avatarrex_lbn2,203920,204124,204112,avatarrex_zzr,101223,101883,102231,101010,102023
+
+cd /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/scripts/trans2smplandjoint
+conda activate anim3dgs
+python batch_process_smpl.py \
+    --subject 204124 \
+    --smpl_model_path /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/smpl_files/ \
+    --amass_base_dir /home/fzhi/fzt/3dgs_pipeline/animatable_3DGS/AnimatableGaussians/Data/Pose/AMASS/CMU/omilabpose \
+    --camera_base_dir /home/fzhi/fzt/3dgs_pipeline/ml_hug/ml-hugs/camera \
+    --output_base_dir /mnt/data_hdd/fzhi/output
+
 
 ./run_full_dataset_generation.sh 
 人物切换：
@@ -566,61 +576,45 @@ python demo.py \
 
 camera hmr
 
-python consolidate_camerahmr_data.py \
-    --input_base /mnt/data_hdd/fzhi/output \
-    --subject 101010 \
-    --output_dir /mnt/data_hdd/fzhi/camerahmr_data \
-    --val_ratio 0.1
+
+unset LD_LIBRARY_PATH
+tmux
+
+1. 处理数据
+cd /home/fzhi/fzt/CameraHMR
+
+python scripts/prepare_fzhi_custom_data.py \
+  --data_root /mnt/data_hdd/fzhi/output \
+  --subjects "102023,lbn1,lbn2,101223,101883" \
+  --views "forward,left,right,backward,top" \
+  --val_ratio 0.1
+
+  --subjects "102023,lbn1,lbn2,203920,204124,204112,101223,101883,102231,101010" \
+
+cd /home/fzhi/fzt/CameraHMR
+python train.py \
+  data=fzhi_custom_train \
+  experiment=camerahmr \
+  exp_name=fzhi_custom_run1 \
+  paths.log_dir=/mnt/data_hdd/fzhi/CameraHMR/ckpt
 
 
-=====================================================================
-训练hybrik的数据集处理：
-
-python consolidate_hybrik_data.py \
-    --input_base /mnt/data_hdd/fzhi/output \
-    --subject 101010 \
-    --output_dir /mnt/data_hdd/fzhi/hybrik_data \
-    --val_ratio 0.1
-```
-
----
-
-## 输出文件
-```
-/mnt/data_hdd/fzhi/hybrik_data/
-├── 101010_train.json      # 训练集 (JSON)
-├── 101010_val.json        # 验证集 (JSON)
-├── 101010_all.json        # 全部数据 (JSON)
-├── 101010_train.pkl       # 训练集 (PKL)
-├── 101010_val.pkl         # 验证集 (PKL)
-├── 101010_all.pkl         # 全部数据 (PKL)
-└── 101010_stats.json      # 统计信息
+cd /home/fzhi/fzt/CameraHMR
+python train.py data=fzhi_custom_train experiment=camerahmr exp_name=mixed_coco paths.log_dir=/mnt/data_hdd/fzhi/CameraHMR/ckpt
 
 
-python consolidate_hybrik_data_with_images.py \
-    --input_base /mnt/data_hdd/fzhi/output \
-    --subject 101010 \
-    --output_dir /mnt/data_hdd/fzhi/hybrik_data \
-    --val_ratio 0.1
-```
+# 需要你的 CameraHMR 账号密码
+# cam_model_cleaned.ckpt
+wget --post-data "username=zhitong.feng@s2023.tu-chemnitz.de&password=Tony19970421." \
+  'https://download.is.tue.mpg.de/download.php?domain=camerahmr&sfile=cam_model_cleaned.ckpt' \
+  -O './data/pretrained-models/cam_model_cleaned.ckpt' --no-check-certificate
 
----
+# model_final_f05665.pkl (Detectron2, 评估时用)
+wget --post-data "username=zhitong.feng@s2023.tu-chemnitz.de&password=Tony19970421." \
+  'https://download.is.tue.mpg.de/download.php?domain=camerahmr&sfile=model_final_f05665.pkl' \
+  -O './data/pretrained-models/model_final_f05665.pkl' --no-check-certificate
 
-## 输出结构
-```
-/mnt/data_hdd/fzhi/hybrik_data/101010/
-├── images/
-│   ├── 00000001.png
-│   ├── 00000002.png
-│   ├── ...
-│   └── 00052000.png
-├── train.json
-├── val.json
-├── all.json
-├── train.pkl
-├── val.pkl
-├── all.pkl
-└── stats.json
+
 =======================================================================
 skateformer:
   python pack_skateformer_dataset.py \

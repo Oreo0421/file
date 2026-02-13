@@ -23,3 +23,33 @@ python tools/test.py configs/visdrone.py \
                     /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/train/epoch_92.pth \
                      --show-dir /mnt/data_hdd/fzhi/track_data/VisDrone/image_detection/output/test
 
+========================================================================================
+mmdetection
+train：
+
+cd /home/fzhi/fzt/intern_pipline/detect/mmdetection
+
+# 激活环境
+conda activate openmmlab
+
+# 训练
+python tools/train.py configs/visdrone/faster-rcnn_r50_fpn_1x_visdrone.py
+
+# 指定工作目录（可选）
+python tools/train.py configs/visdrone/faster-rcnn_r50_fpn_1x_visdrone.py --work-dir work_dirs/visdrone_faster_rcnn
+
+test
+cd /home/fzhi/fzt/intern_pipline/detect/mmdetection
+conda activate openmmlab
+
+# 单卡测试（把 CHECKPOINT_PATH 换成实际权重路径）
+python tools/test.py configs/visdrone/faster-rcnn_r50_fpn_1x_visdrone.py CHECKPOINT_PATH
+
+# 示例：用当前目录下的最新权重
+python tools/test.py configs/visdrone/faster-rcnn_r50_fpn_1x_visdrone.py work_dirs/visdrone_faster_rcnn/epoch_100.pth
+
+
+# 测试并保存预测结果（可选）
+python tools/test.py configs/visdrone/faster-rcnn_r50_fpn_1x_visdrone.py CHECKPOINT_PATH --out results.pkl
+
+
